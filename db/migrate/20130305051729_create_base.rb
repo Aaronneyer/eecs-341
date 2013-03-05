@@ -3,6 +3,7 @@ class CreateBase < ActiveRecord::Migration
     create_table :players do |t|
       t.string :position #Should position be it's own class?
       t.string :name
+      t.string :shortname
       t.integer :team_id
       t.timestamps
     end
@@ -10,6 +11,7 @@ class CreateBase < ActiveRecord::Migration
     create_table :teams do |t|
       t.string :name
       t.string :city
+      t.string :shortname
     end
 
     create_table :games do |t|
@@ -17,6 +19,14 @@ class CreateBase < ActiveRecord::Migration
       t.integer :home_team_id
       t.integer :away_team_id
       t.string :weather
+      t.string :gameid
+    end
+
+    create_table :play do |t|
+      t.integer :game_id
+      t.integer :player_id
+      t.string :type
+      t.integer :yards
     end
 
     create_table :teams_years, id: false do |t|
