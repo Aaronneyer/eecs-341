@@ -1,0 +1,17 @@
+CREATE TABLE "defense_stats" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "solo_tackles" integer, "assist_tackles" integer, "sacks" float, "passes_defended" integer, "interceptions" integer, "interception_touchdowns" integer, "fumbles_forced" integer, "fumbles_recovered" integer, "fumbles_touchdowns" integer);
+CREATE TABLE "games" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "date" datetime, "home_team_id" integer, "away_team_id" integer, "weather" varchar(255), "gameid" varchar(255));
+CREATE TABLE "kicking_stats" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "field_goals_made" integer, "field_goals_attempted" integer, "extra_points_made" integer, "extra_points_attempted" integer);
+CREATE TABLE "passing_stats" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "completions" integer, "attempts" integer, "yards" integer, "touchdowns" integer, "interceptions" integer, "sacked" integer, "rating" float);
+CREATE TABLE "play" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "game_id" integer, "player_id" integer, "type" varchar(255), "yards" integer);
+CREATE TABLE "players" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "position" varchar(255), "name" varchar(255), "shortname" varchar(255), "team_id" integer, "created_at" datetime, "updated_at" datetime);
+CREATE TABLE "players_games" ("player_id" integer, "game_id" integer, "passing_stats_id" integer, "rushing_stats_id" integer, "receiving_stats_id" integer, "return_stats_id" integer, "kicking_stats_id" integer, "punting_stats_id" integer, "defense_stats_id" integer);
+CREATE TABLE "players_teams" ("player_id" integer, "team_id" integer, "start" date, "end" date);
+CREATE TABLE "punting_stats" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "punts" integer, "yards" integer);
+CREATE TABLE "receiving_stats" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "receptions" integer, "targets" integer, "yards" integer, "touchdowns" integer, "fumbles" integer);
+CREATE TABLE "return_stats" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "kick_return_attempts" integer, "kick_return_yards" integer, "kick_return_touchdowns" integer, "punt_return_attempts" integer, "punt_return_yards" integer, "punt_return_touchdowns" integer);
+CREATE TABLE "rushing_stats" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "attempts" integer, "yards" integer, "touchdowns" integer, "fumbles" integer);
+CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL);
+CREATE TABLE "teams" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "city" varchar(255), "shortname" varchar(255));
+CREATE TABLE "teams_years" ("team_id" integer, "year" integer, "wins" integer, "losses" integer, "ties" integer);
+CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version");
+INSERT INTO schema_migrations (version) VALUES ('20130305051729');
