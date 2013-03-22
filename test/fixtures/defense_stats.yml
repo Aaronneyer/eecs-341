@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  solo_tackles: 1
+  assist_tackles: 1
+  sacks: 1.5
+  passes_defended: 1
+  interceptions: 1
+  interception_touchdowns: 1
+  fumbles_forced: 1
+  fumbles_recovered: 1
+  fumbles_touchdown: 1
+
+two:
+  solo_tackles: 1
+  assist_tackles: 1
+  sacks: 1.5
+  passes_defended: 1
+  interceptions: 1
+  interception_touchdowns: 1
+  fumbles_forced: 1
+  fumbles_recovered: 1
+  fumbles_touchdown: 1

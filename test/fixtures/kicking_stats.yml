@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  field_goals_made: 1
+  field_goals_attempted: 1
+  extra_points_made: 1
+  extra_points_attempted: 1
+
+two:
+  field_goals_made: 1
+  field_goals_attempted: 1
+  extra_points_made: 1
+  extra_points_attempted: 1

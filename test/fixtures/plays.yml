@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  game_id: 1
+  player_id: 1
+  type: 
+  yards: 1
+
+two:
+  game_id: 1
+  player_id: 1
+  type: 
+  yards: 1

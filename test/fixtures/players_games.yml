@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  player_id: 1
+  game_id: 1
+  passing_stats_id: 1
+  rushing_stats_id: 1
+  receiving_stats_id: 1
+  return_stats_id: 1
+  kicking_stats_id: 1
+  punting_stats_id: 1
+  defense_stats_id: 1
+
+two:
+  player_id: 1
+  game_id: 1
+  passing_stats_id: 1
+  rushing_stats_id: 1
+  receiving_stats_id: 1
+  return_stats_id: 1
+  kicking_stats_id: 1
+  punting_stats_id: 1
+  defense_stats_id: 1

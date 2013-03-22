@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  player_id: 1
+  team_id: 1
+  start: 2013-03-21
+  end: 2013-03-21
+
+two:
+  player_id: 1
+  team_id: 1
+  start: 2013-03-21
+  end: 2013-03-21

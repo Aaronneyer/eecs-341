@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  attempts: 1
+  yards: 1
+  touchdowns: 1
+  fumbles: 1
+
+two:
+  attempts: 1
+  yards: 1
+  touchdowns: 1
+  fumbles: 1

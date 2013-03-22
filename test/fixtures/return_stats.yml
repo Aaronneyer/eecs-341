@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  kick_return_attempts: 1
+  kick_return_yards: 1
+  kick_return_touchdowns: 1
+  punt_return_attempts: 1
+  punt_return_yards: 1
+  punt_return_touchdowns: 1
+
+two:
+  kick_return_attempts: 1
+  kick_return_yards: 1
+  kick_return_touchdowns: 1
+  punt_return_attempts: 1
+  punt_return_yards: 1
+  punt_return_touchdowns: 1

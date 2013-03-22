@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  receptions: 1
+  targets: 1
+  yards: 1
+  touchdowns: 1
+  fumbles: 1
+
+two:
+  receptions: 1
+  targets: 1
+  yards: 1
+  touchdowns: 1
+  fumbles: 1

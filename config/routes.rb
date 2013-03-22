@@ -1,4 +1,12 @@
 Eecs341::Application.routes.draw do
+  resources :plays
+
+  resources :games
+
+  resources :teams
+
+  resources :players
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

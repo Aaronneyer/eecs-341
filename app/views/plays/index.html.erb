@@ -1,0 +1,33 @@
+<h1>Listing plays</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Game</th>
+      <th>Player</th>
+      <th>Type</th>
+      <th>Yards</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @plays.each do |play| %>
+    <tr>
+      <td><%= play.game_id %></td>
+      <td><%= play.player_id %></td>
+      <td><%= play.type %></td>
+      <td><%= play.yards %></td>
+      <td><%= link_to 'Show', play %></td>
+      <td><%= link_to 'Edit', edit_play_path(play) %></td>
+      <td><%= link_to 'Destroy', play, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br />
+
+<%= link_to 'New Play', new_play_path %>

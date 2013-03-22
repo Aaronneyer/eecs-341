@@ -16,31 +16,3 @@ CREATE TABLE "teams" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" va
 CREATE INDEX "index_players_games_on_player_id_and_game_id" ON "players_games" ("player_id", "game_id");
 CREATE INDEX "index_players_teams_on_player_id_and_team_id" ON "players_teams" ("player_id", "team_id");
 CREATE INDEX "index_team_years_on_team_id" ON "team_years" ("team_id");
-CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version");
-INSERT INTO schema_migrations (version) VALUES ('20130321211353');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321211527');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321211643');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321211720');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321211845');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321212129');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321212302');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321212428');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321212503');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321212558');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321212739');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321212853');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321213109');
-
-INSERT INTO schema_migrations (version) VALUES ('20130321213156');
