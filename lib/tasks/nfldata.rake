@@ -2,9 +2,16 @@ task :loaddata do
   require 'nokogiri'
   require 'open-uri'
   doc = Nokogiri::HTML(open("http://www.pro-football-reference.com/players/J/JohnCh04.htm"))
-  rushing_and_receiving_table = doc.css("#rushing_and_receiving")
-  head = rushing_and_receiving_table.children.css("thead")
-  body = rushing_and_receiving_table.children.css("tbody")
+  tables = ["#rushing_and_receiving", "#defense", "#passing", "#returns", "#kicking"]
+  tables.each do |table|
+    temp = doc.css(table)
+    p scrape_table(temp) unless temp.empty?
+  end
+end
+
+def scrape_table(table)
+  head = table.children.css("thead")
+  body = table.children.css("tbody")
   header = []
   year_stats = []
   head.children.css("tr").each do |tr|
@@ -32,6 +39,5 @@ task :loaddata do
     end
     year_stats << temp
   end
-  p year_stats
+  year_stats
 end
-
