@@ -1,0 +1,53 @@
+<%= form_for(@players_year) do |f| %>
+  <% if @players_year.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@players_year.errors.count, "error") %> prohibited this players_year from being saved:</h2>
+
+      <ul>
+      <% @players_year.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :player %><br />
+    <%= f.text_field :player %>
+  </div>
+  <div class="field">
+    <%= f.label :year %><br />
+    <%= f.number_field :year %>
+  </div>
+  <div class="field">
+    <%= f.label :passing_stats %><br />
+    <%= f.text_field :passing_stats %>
+  </div>
+  <div class="field">
+    <%= f.label :rushing_stats %><br />
+    <%= f.text_field :rushing_stats %>
+  </div>
+  <div class="field">
+    <%= f.label :receiving_stats %><br />
+    <%= f.text_field :receiving_stats %>
+  </div>
+  <div class="field">
+    <%= f.label :return_stats %><br />
+    <%= f.text_field :return_stats %>
+  </div>
+  <div class="field">
+    <%= f.label :kicking_stats %><br />
+    <%= f.text_field :kicking_stats %>
+  </div>
+  <div class="field">
+    <%= f.label :punting_stats %><br />
+    <%= f.text_field :punting_stats %>
+  </div>
+  <div class="field">
+    <%= f.label :defense_stats %><br />
+    <%= f.text_field :defense_stats %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

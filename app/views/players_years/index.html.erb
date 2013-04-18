@@ -1,0 +1,43 @@
+<h1>Listing players_years</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Player</th>
+      <th>Year</th>
+      <th>Passing stats</th>
+      <th>Rushing stats</th>
+      <th>Receiving stats</th>
+      <th>Return stats</th>
+      <th>Kicking stats</th>
+      <th>Punting stats</th>
+      <th>Defense stats</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @players_years.each do |players_year| %>
+    <tr>
+      <td><%= players_year.player %></td>
+      <td><%= players_year.year %></td>
+      <td><%= players_year.passing_stats %></td>
+      <td><%= players_year.rushing_stats %></td>
+      <td><%= players_year.receiving_stats %></td>
+      <td><%= players_year.return_stats %></td>
+      <td><%= players_year.kicking_stats %></td>
+      <td><%= players_year.punting_stats %></td>
+      <td><%= players_year.defense_stats %></td>
+      <td><%= link_to 'Show', players_year %></td>
+      <td><%= link_to 'Edit', edit_players_year_path(players_year) %></td>
+      <td><%= link_to 'Destroy', players_year, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br />
+
+<%= link_to 'New Players year', new_players_year_path %>

@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Player:</strong>
+  <%= @players_year.player %>
+</p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @players_year.year %>
+</p>
+
+<p>
+  <strong>Passing stats:</strong>
+  <%= @players_year.passing_stats %>
+</p>
+
+<p>
+  <strong>Rushing stats:</strong>
+  <%= @players_year.rushing_stats %>
+</p>
+
+<p>
+  <strong>Receiving stats:</strong>
+  <%= @players_year.receiving_stats %>
+</p>
+
+<p>
+  <strong>Return stats:</strong>
+  <%= @players_year.return_stats %>
+</p>
+
+<p>
+  <strong>Kicking stats:</strong>
+  <%= @players_year.kicking_stats %>
+</p>
+
+<p>
+  <strong>Punting stats:</strong>
+  <%= @players_year.punting_stats %>
+</p>
+
+<p>
+  <strong>Defense stats:</strong>
+  <%= @players_year.defense_stats %>
+</p>
+
+
+<%= link_to 'Edit', edit_players_year_path(@players_year) %> |
+<%= link_to 'Back', players_years_path %>
