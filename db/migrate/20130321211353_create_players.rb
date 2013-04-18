@@ -3,7 +3,8 @@ class CreatePlayers < ActiveRecord::Migration
     create_table :players do |t|
       t.string :position
       t.string :name
-      t.string :url, unique: true
+      t.string :url
+      t.index :url, unique: true
 
       t.timestamps
     end

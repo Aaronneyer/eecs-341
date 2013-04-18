@@ -1,15 +1,37 @@
 task :loaddata => :environment do
   require 'nokogiri'
   require 'open-uri'
-  doc = Nokogiri::HTML(open("http://www.pro-football-reference.com/players/J/JohnCh04.htm"))
+  base_url = "http://www.pro-football-reference.com"
+  ["db", "te", "rb", "p", "ol", "k", "wr", "lb", "qb", "dl"].each do |position_index|
+    puts "Started on #{position_index}"
+    position_doc = Nokogiri::HTML(open("http://www.pro-football-reference.com/players/#{position_index}index.htm"))
+    links = position_doc.css("pre a")
+    players = []
+    links.each do |l|
+      players << ["#{base_url}#{l.attribute("href").value}", l.content]
+    end
+    players.each do |player|
+      if p=Player.find_by_url(player[0])
+        puts "Skipped #{p.name}"
+      else
+        get_player_info(*player)
+      end
+    end
+  end
+end
+
+def get_player_info(url, name)
+  doc = Nokogiri::HTML(open(url))
   position = doc.css("p:contains('Position')").first.content.match(/Position:\ (.*)\n/)[1]
-  player = Player.create(position: position, name: "Chris Johnson")
+  player = Player.create(position: position, name: name, url: url)
   tables = ["#rushing_and_receiving", "#defense", "#passing", "#returns", "#kicking"]
   tables.each do |table|
     temp = doc.css(table)
-    p scrape_table(temp, table, player) unless temp.empty?
+    scrape_table(temp, table, player) unless temp.empty?
   end
+  puts "Created #{player.name}"
 end
+
 
 def scrape_table(table, id, player)
   head = table.children.css("thead")

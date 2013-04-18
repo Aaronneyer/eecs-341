@@ -8,6 +8,7 @@ CREATE TABLE "stats" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "rushing_
 CREATE TABLE "team_years" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "team_id" integer, "year" integer, "wins" integer, "losses" integer, "ties" integer, "created_at" datetime, "updated_at" datetime);
 CREATE TABLE "teams" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "city" varchar(255), "shortname" varchar(255), "created_at" datetime, "updated_at" datetime);
 CREATE INDEX "index_players_games_on_player_id_and_game_id" ON "players_games" ("player_id", "game_id");
+CREATE UNIQUE INDEX "index_players_on_url" ON "players" ("url");
 CREATE INDEX "index_players_teams_on_player_id_and_team_id" ON "players_teams" ("player_id", "team_id");
 CREATE INDEX "index_players_years_on_player_id" ON "players_years" ("player_id");
 CREATE INDEX "index_team_years_on_team_id" ON "team_years" ("team_id");
