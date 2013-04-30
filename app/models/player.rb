@@ -6,4 +6,6 @@ class Player < ActiveRecord::Base
   has_and_belongs_to_many :games
   has_many :plays
   has_many :players_years
+
+  scope :years_stats, -> {joins(:players_years => :stats)}
 end

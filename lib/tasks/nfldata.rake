@@ -22,7 +22,11 @@ end
 
 def get_player_info(url, name)
   doc = Nokogiri::HTML(open(url))
-  position = doc.css("p:contains('Position')").first.content.match(/Position:\ (.*)\n/)[1]
+  if x= doc.css("p:contains('Position')").first
+    position = x.content.match(/Position:\ (.*)\n/)[1]
+  else
+    position = "N/A"
+  end
   player = Player.create(position: position, name: name, url: url)
   tables = ["#rushing_and_receiving", "#defense", "#passing", "#returns", "#kicking"]
   tables.each do |table|
