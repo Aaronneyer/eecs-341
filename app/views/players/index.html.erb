@@ -1,13 +1,11 @@
-<h1>Listing players</h1>
+<h1>All Players</h1>
 
+<%= will_paginate @players, :renderer => BootstrapPagination::Rails %>
 <table>
   <thead>
     <tr>
       <th>Position</th>
       <th>Name</th>
-      <th></th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
 
@@ -15,15 +13,9 @@
     <% @players.each do |player| %>
     <tr>
       <td><%= player.position %></td>
-      <td><%= player.name %></td>
-      <td><%= link_to 'Show', player %></td>
-      <td><%= link_to 'Edit', edit_player_path(player) %></td>
-      <td><%= link_to 'Destroy', player, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <td><%= link_to player.name, player %></td>
     </tr>
     <% end %>
   </tbody>
 </table>
-
-<br />
-
-<%= link_to 'New Player', new_player_path %>
+<%= will_paginate @players, :renderer => BootstrapPagination::Rails %>
