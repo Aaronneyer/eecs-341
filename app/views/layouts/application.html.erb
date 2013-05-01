@@ -1,14 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Eecs341</title>
+  <title><%= yield(:title) %> </title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
+  <style>
+    body { 100% }
+    #content { 
+      padding-bottom: 50px; 
+      min-height: 80%;
+    }
+    /*.footer { padding-right: 50px; padding-left: 50px; }*/
+  </style>
 </head>
 <body>
+  <header class='navbar'>
+  <div class='navbar-inner my-header'>
+    <div class='container-fluid'>
+      <%= link_to "StatApp", root_path, class: "brand" %>
+      <nav>
+      <ul class='nav'>
+        <li>
+        <%= link_to "Players", players_path %>
+        </li>
+        <li>
+        <%= link_to "Teams", teams_path %>
+        </li>
+      </ul>
+      <ul class='nav pull-right'>
+        <li>
+        <%= text_field_tag :search, :search %>
+        </li>
+      </ul>
+      </nav>
+    </div>
+  </div>
+  </header>
 
-<%= yield %>
+<div id="content" class="container">
+  <%= yield %>
+</div>
+
+<footer class='footer'>
+<small>By Bharat Gupta, Aaron Neyer, Diego Waxemberg, Robert Meyer</small>
+<ul class="nav pull-right">
+  <li><%= link_to "About", "#" %></li>
+</ul>
+</footer>
 
 </body>
 </html>
