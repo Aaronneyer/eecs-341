@@ -10,6 +10,10 @@ class Team < ActiveRecord::Base
   end
 
   def players_in(year)
-    self.players_teams.where("start <= ? AND end >= ?", year, year).collect{|pt| pt.player}.uniq
+    players_teams.where("start <= ? AND end >= ?", year, year).collect{|pt| pt.player}.uniq
+  end
+
+  def games
+    Game.where("home_team_id = ? OR away_team_id = ?", id, id)
   end
 end
