@@ -188,6 +188,7 @@ def scrape_game_table(table, player)
       away_team = g["Opp"]
       home_team = g["Tm"]
     end
+    pteam = Team.find_by_shortname(g["Tm"])
     away = Team.find_by_shortname(away_team)
     home = Team.find_by_shortname(home_team)
     begin
@@ -196,7 +197,7 @@ def scrape_game_table(table, player)
       p g
       exit
     end
-    pgame = PlayersGame.find_or_initialize_by(player_id: player.id, game_id: game.id)
+    pgame = PlayersGame.find_or_initialize_by(player_id: player.id, game_id: game.id, team_id: pteam.id)
     pgame.player_stats ||= PlayerStats.new
     pgame.player_stats.assign_attributes(rushing_attempts: g["Rushing_Att"],
                                   rushing_yards: g["Rushing_Yds"],

@@ -1,7 +1,7 @@
 class CreateGames < ActiveRecord::Migration
   def change
     create_table :games do |t|
-      t.datetime :date
+      t.date :date
       t.integer :year
       t.integer :week
       t.references :home_team

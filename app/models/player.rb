@@ -7,7 +7,13 @@ class Player < ActiveRecord::Base
 
   scope :years_stats, -> {joins(:players_years => :player_stats)}
 
+  ALL_POSITIONS = self.all.collect(&:positions).flatten.uniq
+
   def current_team
     self.players_teams.order("end DESC, start DESC").first
+  end
+
+  def positions
+    position.split(",")
   end
 end
