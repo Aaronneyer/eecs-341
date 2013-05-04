@@ -15,8 +15,11 @@ ActiveRecord::Schema.define(version: 20130418163151) do
 
   create_table "games", force: true do |t|
     t.datetime "date"
+    t.integer  "year"
+    t.integer  "week"
     t.integer  "home_team_id"
     t.integer  "away_team_id"
+    t.integer  "winning_team_id"
     t.string   "weather"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -35,24 +38,18 @@ ActiveRecord::Schema.define(version: 20130418163151) do
   create_table "players_games", id: false, force: true do |t|
     t.integer  "player_id"
     t.integer  "game_id"
-    t.integer  "passing_stats_id"
-    t.integer  "rushing_stats_id"
-    t.integer  "receiving_stats_id"
-    t.integer  "return_stats_id"
-    t.integer  "kicking_stats_id"
-    t.integer  "punting_stats_id"
-    t.integer  "defense_stats_id"
+    t.integer  "stats_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "players_games", ["player_id", "game_id"], name: "index_players_games_on_player_id_and_game_id"
 
-  create_table "players_teams", id: false, force: true do |t|
+  create_table "players_teams", force: true do |t|
     t.integer  "player_id"
     t.integer  "team_id"
-    t.date     "start"
-    t.date     "end"
+    t.integer  "start"
+    t.integer  "end"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -111,6 +108,7 @@ ActiveRecord::Schema.define(version: 20130418163151) do
 
   create_table "team_years", force: true do |t|
     t.integer  "team_id"
+    t.integer  "stats_id"
     t.integer  "year"
     t.integer  "wins"
     t.integer  "losses"
@@ -124,9 +122,12 @@ ActiveRecord::Schema.define(version: 20130418163151) do
   create_table "teams", force: true do |t|
     t.string   "name"
     t.string   "city"
+    t.boolean  "active"
     t.string   "shortname"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "teams", ["shortname"], name: "index_teams_on_shortname", unique: true
 
 end

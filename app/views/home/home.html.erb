@@ -1,11 +1,10 @@
-<% provide(:title, "Home") %>
-
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span6 well">
-      <%= @randplayer.name %>
       <ul>
-        <% @randplayer.players_years.last.stats.attributes.each do |k,v| %>
+        <li>Name: <%= @randplayer.name %></li>
+        <li>Year: <%= @lastyear.year %></li>
+        <% @lastyear.stats.attributes.each do |k,v| %>
           <li><%= k.titleize %>: <%= v %></li>
         <% end %>
       </ul>

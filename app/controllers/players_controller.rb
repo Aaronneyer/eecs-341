@@ -1,20 +1,17 @@
 class PlayersController < ApplicationController
-  before_action :set_player, only: [:show]
 
   # GET /players
   # GET /players.json
   def index
-    @players = Player.paginate(page: params[:page])
+    @players = Player.paginate(page: params[:page]).order("name")
+    @title = "All Players"
   end
 
   # GET /players/1
   # GET /players/1.json
   def show
+    @player = Player.find(params[:id])
+    @title = @player.name
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_player
-      @player = Player.find(params[:id])
-    end
 end

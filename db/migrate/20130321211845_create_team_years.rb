@@ -3,6 +3,7 @@ class CreateTeamYears < ActiveRecord::Migration
     create_table :team_years do |t|
       t.references :team
       t.index :team_id
+      t.references :stats
       t.integer :year
       t.integer :wins
       t.integer :losses
