@@ -192,7 +192,7 @@ def scrape_game_table(table, player)
     away = Team.find_by_shortname(away_team)
     home = Team.find_by_shortname(home_team)
     begin
-      game = Game.find_or_create_by(date: Date.parse(g["Date"]), year: g["Year"], week: g["G#"], away_team_id: away.id, home_team_id: home.id)
+      game = Game.find_or_create_by(date: Date.parse(g["Date"]), year: g["Year"], away_team_id: away.id, home_team_id: home.id)
     rescue
       p g
       exit
