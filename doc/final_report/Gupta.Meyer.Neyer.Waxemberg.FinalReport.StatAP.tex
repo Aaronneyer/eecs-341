@@ -161,14 +161,68 @@ At this stage of the project, it does not appear that the user will be allowed t
 
 \subsubsection{Determine a players career record against a given team}
 \begin{description}
+  \item[English] \hfill \\
+  Find the average number of yards Chris Johnson has while playing in a game for the Titans between the years 2008 and 2010.
   \item[SQL] \hfill \\
   The first item
   \item[RA] \hfill \\
-  $(\Pi_year=2008\vee year=2009\vee year=2010((\sigma_team_name=Titans((\sigma_player_name=Chris Johnson(Game \bowtie PlayersGame \bowtie Player)) \bowtie PlayersTeam \bowtie Team)) \bowtie PlayerTeam)) \bowtie TeamStats$
+  Games \leftarrow(\sigma_{year=2008\vee year=2009\vee year=2010}((\sigma_{team_name=Titans}((\sigma_{player_name=Chris Johnson}(Game \bowtie PlayersGame \bowtie Player)) \bowtie Team))))\\
+  Games_{average(\sigma(yardage))}\\
+  Yardage can equal rushing\_yards, passing\_yards, receiving\_yards, punt\_return\_yards, or kick\_return\_yards.
+  \item[TRC] \hfill \\
+  \{Average(t^{(1)} | \exists g(Games(g)\wedge \exists p(Player(p)\wedge \exists T(Team(T)\wedge \exists py(PlayerYear(py) \wedge \exists pg(PlayerGame(pg) \wedge \exists ps(PlayerStats(ps) \wedge\\
+p.name = "Chris Johnson" \wedge p.pid = py.pid \wedge (py.year = "2008" \vee py.year = "2009" \vee py.year = "2010")\wedge\\
+p.pid = pg.pid \wedge pg.tid = T.tid \wedge T.team\_name = "Titans" \wedge pg.player\_stats\_id = ps.player\_stats\_id \wedge\\
+t[1] = ps.rushing\_yards))))))\}
+\end{description}
+\begin{description}
+  \item[English] \hfill \\
+  Find the teams in any specific year that had a player get greater than or equal to a certain number of yards.
+  \item[SQL] \hfill \\
+  The first item
+  \item[RA] \hfill \\
+  PositionYear \leftarrow \sigma_{year=specyear}((\sigma_{position = player}Player) \bowtie PlayersYear)\\
+  Yards \leftarrow \sigma_{passing\_yards\geq numyards}((PositionYear \bowtie PlayersGame) \bowtie PlayerStats)\\
+  \Pi_{team\_name}(Yards \bowtie Team)
   \item[TRC] \hfill \\
   The third
 \end{description}
-
+\begin{description}
+  \item[English] \hfill \\
+  Find the city that has the most number of away team wins in a given year.
+  \item[SQL] \hfill \\
+  The first item
+  \item[RA] \hfill \\
+  AwayGames \leftarrow \sigma_{year=specyear}((Team \bowtie_{team\_id = home\_team\_id} Game) \bowtie TeamYear)\\
+  \Pi_{city}(AwayGames \bowtie TeamStats)_{max(\sigma(losses))}
+  \item[TRC] \hfill \\
+  The third
+\end{description}
+\begin{description}
+  \item[English] \hfill \\
+  Find the team with the most offensive yards in a given year.
+  \item[SQL] \hfill \\
+  The first item
+  \item[RA] \hfill \\
+  YearTeam \leftarrow (\sigma_{year}(Team \bowtie TeamYear))\\
+  TotalYards \leftarrow (YearTeam \bowtie TeamStats)_{sum(offensive\_yards)}\\
+  \Pi_{team\_name}(TotalYards_{max(\sigma(offensive_yards))})
+  \item[TRC] \hfill \\
+  The third
+\end{description}
+\begin{description}
+  \item[English] \hfill \\
+  Find a teams average number of a specific type of yards for a given position in a given year.
+  \item[SQL] \hfill \\
+  The first item
+  \item[RA] \hfill \\
+  PlayerPosition \leftarrow (\sigma_{year=specyear}(\sigma_{position=specposition}(Player)) \bowtie PlayerYear)\\
+  PositionStats \leftarrow (PlayerPosition \bowtie PlayersGame \bowtie PlayerStats)\\
+  \Pi_{yardage}(PositionStats_{average(\sigma(yardage))})\\
+  Yardage can equal rushing\_yards, passing\_yards, receiving\_yards, punt\_return\_yards, or kick\_return\_yards.
+  \item[TRC] \hfill \\
+  The third
+\end{description}
 \subsubsection{Other Queries}
 
 \begin{enumerate}
