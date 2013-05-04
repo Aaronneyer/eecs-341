@@ -3,7 +3,7 @@ class CreatePlayersYears < ActiveRecord::Migration
     create_table :players_years do |t|
       t.references :player, index: true
       t.integer :year
-      t.references :stats
+      t.references :player_stats
 
       t.timestamps
     end

@@ -1,0 +1,35 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  wins: 1
+  losses: 1
+  ties: 1
+  scored: 1
+  allowed: 1
+  first_downs_made: 1
+  offensive_total_yards: 1
+  offensive_passing_yards: 1
+  offensive_rushing_yards: 1
+  turnovers_lost: 1
+  first_downs_allowed: 1
+  total_yards_allowed: 1
+  passing_yards_allowed: 1
+  rushing_yards_allowed_integer: MyString
+  turnovers_gained: 1
+
+two:
+  wins: 1
+  losses: 1
+  ties: 1
+  scored: 1
+  allowed: 1
+  first_downs_made: 1
+  offensive_total_yards: 1
+  offensive_passing_yards: 1
+  offensive_rushing_yards: 1
+  turnovers_lost: 1
+  first_downs_allowed: 1
+  total_yards_allowed: 1
+  passing_yards_allowed: 1
+  rushing_yards_allowed_integer: MyString
+  turnovers_gained: 1

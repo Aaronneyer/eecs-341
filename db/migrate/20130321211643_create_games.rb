@@ -6,8 +6,9 @@ class CreateGames < ActiveRecord::Migration
       t.integer :week
       t.references :home_team
       t.references :away_team
-      t.references :winning_team
-      t.string :weather
+      t.references :home_team_stats
+      t.references :away_team_stats
+      t.integer :result
 
       t.timestamps
     end

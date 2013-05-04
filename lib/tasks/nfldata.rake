@@ -1,4 +1,4 @@
-task :loaddata => ["db:drop", "db:migrate", :loadteams, :loadyears, :loadgames]
+task :loaddata => ["db:drop", "db:migrate", :loadteams, :teamstats, :loadyears, :loadgames]
 
 task :loadteams => :environment do
   require 'nokogiri'
@@ -19,6 +19,96 @@ task :loadteams => :environment do
     shortname = a.attribute("href").value.match(/teams\/(.*)\//)[1]
     Team.create(city: city, name: name, shortname: shortname, active: false)
     puts "Created #{city} #{name}"
+  end
+end
+
+task :teamstats => :environment do
+  require 'nokogiri'
+  require 'open-uri'
+  Team.all.each do |team|
+    base_url = "http://www.pro-football-reference.com/teams/"
+    team_doc = Nokogiri::HTML(open("#{base_url}#{team.shortname}"))
+    table = team_doc.css("#team_index")
+    puts "Starting on #{team.city} #{team.name}"
+    rows = table.children.css("tbody").first.children.css("tr")
+    rows.each do |tr|
+      td = tr.children.css("td").first
+      year_doc = Nokogiri::HTML(open("#{base_url}#{team.shortname}/#{td.content}.htm"))
+      scrape_team_year(year_doc, team, td.content.to_i)
+    end
+  end
+end
+
+def scrape_team_year(doc, team, year)
+  puts "Starting on #{team.city} #{team.name} #{year}"
+  wins, losses, ties = doc.content.match(/Record: (\d+-\d+-\d+)/)[1].split("-")
+  game_table = doc.css("#team_gamelogs")
+  year_table = doc.css("#team_stats")
+  year_stats = get_table_hash(year_table)
+  o = year_stats[0]
+  d = year_stats[1]
+  ystats = TeamStats.new(wins: wins, losses: losses, ties: ties,
+                      points_scored: o["Pts"],
+                      points_allowed: d["Pts"],
+                      first_downs_made: o["1stD"],
+                      offensive_total_yards: o["Yds"],
+                      offensive_passing_yards: o["Passing_Yds"],
+                      offensive_rushing_yards: o["Rushing_Yds"],
+                      turnovers_lost: o["TO"],
+                      first_downs_allowed: d["1stD"],
+                      total_yards_allowed: d["Yds"],
+                      passing_yards_allowed: d["Passing_Yds"],
+                      rushing_yards_allowed: d["Rushing_Yds"],
+                      turnovers_gained: d["TO"])
+  t = TeamYear.new(team: team, year: year, team_stats_id: ystats.id)
+
+  game_stats = get_table_hash(game_table)
+  game_stats.each do |g|
+    if g["Date"].present?
+      is_away = g[""]=="@"
+      if is_away
+        home = Team.find_by_shortname(g["Opp"])
+        away = team
+      else
+        away = Team.find_by_shortname(g["Opp"])
+        home = team
+      end
+      tm_score = g["Score_Tm"].to_i
+      opp_score = g["Score_Opp"].to_i
+      gwins = 0
+      glosses = 0
+      gties = 0
+      if tm_score > opp_score
+        gwins = 1
+      elsif tm_score < opp_score
+        glosses = 1
+      else
+        gties = 1
+      end
+      date = DateTime.parse(g["Date"])
+      game = Game.find_or_create_by(date: DateTime.parse("#{g["Date"]} #{date.month==1 ? year+1 : year}"),
+                                    year: year, week: g["Week"], away_team_id: away.id, home_team_id: home.id)
+      stats = TeamStats.new(wins: gwins, losses: glosses, ties: gties,
+                         points_scored: g["Score_Tm"],
+                         points_allowed: g["Score_Opp"],
+                         first_downs_made: g["Offense_1stD"],
+                         offensive_total_yards: g["Offense_TotYd"],
+                         offensive_passing_yards: g["Offense_PassY"],
+                         offensive_rushing_yards: g["Offense_RushY"],
+                         turnovers_lost: g["Offense_TO"],
+                         first_downs_allowed: g["Defense_1stD"],
+                         total_yards_allowed: g["Defense_TotYd"],
+                         passing_yards_allowed: g["Defense_PassY"],
+                         rushing_yards_allowed: g["Defense_RushY"],
+                         turnovers_gained: g["Defense_TO"])
+      if is_away
+        game.away_team_stats = stats
+      else
+        game.home_team_stats = stats
+      end
+      stats.save!
+      game.save!
+    end
   end
 end
 
@@ -73,39 +163,7 @@ def get_player_info(url, name)
 end
 
 def scrape_game_table(table, player)
-  head = table.children.css("thead")
-  body = table.children.css("tbody")
-  header = []
-  game_stats = []
-  head.children.css("tr").each do |tr|
-    i=0
-    tr.children.css("th").each do |th|
-      if th.attributes["colspan"]
-        x = th.attributes["colspan"].value.to_i
-      else
-        x = 1
-      end
-      x.times do
-        header[i] ||= ""
-        header[i] += "_" unless header[i].empty?
-        header[i] += th.content
-        i += 1
-      end
-    end
-  end
-  body.children.css("tr").each do |tr|
-    if /stats\.\d+/ === tr.attribute("id")
-      temp = {}
-      tr.children.css("td").each_with_index do |td,i|
-        if ["Tm", "Opp"].include?(header[i])
-          temp[header[i]] = td.children.css("a").attribute("href").value.match(/\/teams\/(\w+)\/\d+/)[1]
-        else
-          temp[header[i]] = td.content
-        end
-      end
-      game_stats << temp
-    end
-  end
+  game_stats = get_table_hash(table)
   game_stats.each do |g|
     if g[""]=="@"
       away_team = g["Tm"]
@@ -114,18 +172,9 @@ def scrape_game_table(table, player)
       away_team = g["Opp"]
       home_team = g["Tm"]
     end
-    if /^W/ === g["Result"]
-      winning_team = g["Tm"]
-    elsif /^L/ === g["Result"]
-      winning_team = g["Opp"]
-    elsif /^T/ === g["Result"]
-      winning_team = nil
-    end
-    winning = Team.find_by_shortname(winning_team)
-    winning = winning.id if winning
     away = Team.find_by_shortname(away_team)
     home = Team.find_by_shortname(home_team)
-    game = Game.find_or_create_by(date: g["Date"], year: g["Year"], week: g["G#"], away_team_id: away.id, home_team_id: home.id, winning_team_id: winning)
+    game = Game.find_by(date: DateTime.parse(g["Date"]), year: g["Year"], week: g["G#"], away_team_id: away.id, home_team_id: home.id)
     pgame = PlayersGame.find_or_initialize_by(player_id: player.id, game_id: game.id)
     pgame.stats ||= Stats.new
     pgame.stats.assign_attributes(rushing_attempts: g["Rushing_Att"],
@@ -167,11 +216,12 @@ def scrape_game_table(table, player)
   end
 end
 
-def scrape_table(table, id, player)
+def get_table_hash(table)
+  id = table.attribute("id")
   head = table.children.css("thead")
   body = table.children.css("tbody")
   header = []
-  year_stats = []
+  stats = []
   head.children.css("tr").each do |tr|
     i=0
     tr.children.css("th").each do |th|
@@ -189,25 +239,27 @@ def scrape_table(table, id, player)
     end
   end
   body.children.css("tr").each do |tr|
-    temp = {}
-    tr.children.css("td").each_with_index do |td,i|
-      if header[i]=="Tm"
-        begin
-          temp["Tm"] = td.children.css("a").attribute("href").value.match(/\/teams\/(\w+)\/\d+/)[1]
-        rescue
-          if !(/\dTM/ === td.content)
-            p td
-            raise "Something went wrong"
-          else
-            temp["Tm"] = nil
+    if id != "stats" || /stats\.\d+/ === tr.attribute("id")
+      temp = {}
+      tr.children.css("td").each_with_index do |td,i|
+        if ["Tm", "Opp"].include?(header[i])
+          begin
+            temp[header[i]] = td.children.css("a").attribute("href").value.match(/\/teams\/(\w+)\/\d+/)[1]
+          rescue
+            temp[header[i]] = nil
           end
+        else
+          temp[header[i]] = td.content
         end
-      else
-        temp[header[i]] = td.content
       end
+      stats << temp
     end
-    year_stats << temp
   end
+  return stats
+end
+
+def scrape_table(table, id, player)
+  year_stats = get_table_hash(table)
   last_year = nil
   year_stats.each do |year|
     this_year = year["Year"]

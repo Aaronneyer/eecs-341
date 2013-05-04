@@ -4,8 +4,7 @@ class CreateTeams < ActiveRecord::Migration
       t.string :name
       t.string :city
       t.boolean :active
-      t.string :shortname
-      t.index :shortname, unique: true
+      t.string :shortname, index: true, unique: true
 
       t.timestamps
     end

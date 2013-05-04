@@ -1,6 +1,6 @@
-class CreateStats < ActiveRecord::Migration
+class CreatePlayerStats < ActiveRecord::Migration
   def change
-    create_table :stats do |t|
+    create_table :player_stats do |t|
       t.integer :rushing_attempts
       t.integer :rushing_yards
       t.integer :rushing_touchdowns
