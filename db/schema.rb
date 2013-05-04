@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20130418163151) do
 
   add_index "players", ["url"], name: "index_players_on_url", unique: true
 
-  create_table "players_games", id: false, force: true do |t|
+  create_table "players_games", force: true do |t|
     t.integer  "player_id"
     t.integer  "game_id"
     t.integer  "stats_id"
