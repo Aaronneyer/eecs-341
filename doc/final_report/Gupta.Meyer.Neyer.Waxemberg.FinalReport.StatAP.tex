@@ -1,0 +1,285 @@
+\documentclass[12pt,letterpaper]{article}
+%\usepackage[utf8]{inputenc}
+\usepackage[letterpaper,includehead, top=0.25cm, bottom=2.0cm, right=2.0cm, left=2.0cm]{geometry}
+% \renewcommand{\rmfamily}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{paralist}
+\usepackage{hyperref}
+\usepackage{subfig}
+\usepackage{pdfpages}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\usepackage{listings} %Code
+\lstset{language=Ruby, tabsize=4,framexleftmargin=5mm,breaklines=true}
+
+\hypersetup{
+    colorlinks,%
+    citecolor=black,%
+    filecolor=black,%
+    linkcolor=black,%
+    urlcolor=black
+}
+
+\begin{document}
+%\begin{sf}
+
+\newpage
+\pagestyle{fancy}
+\fancyhf{}
+\vspace*{6cm}
+\begin{center}
+{\huge \bf StatAP}
+\linebreak
+\vspace{1cm}
+\large {Custom statistics for the NFL}
+\vspace{1cm}
+\end{center}
+%----------------- Names ------------------------
+\vfill
+\begin{center}
+\begin{tabular}{ll}
+%--alphabetic order
+Bharat Gupta, Robert Mayer, Aaron Neyer, and Diego Waxemberg\\
+\today\\
+Final Report
+\end{tabular}
+\end{center}
+
+
+\newpage
+\pagestyle{fancy}
+\fancyhf{}
+
+%\fancyhead[L]{\rightmark}
+\fancyhead[L]{\small \rm \textit{\rightmark}}
+\fancyhead[R]{\small \rm \textbf{\thepage}}
+
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+% =============== Index ===============
+
+\tableofcontents
+\listoffigures
+
+% =============== Section ===============
+\newpage
+\section{Introduction}
+
+\subsection{Abstract}
+The National Football League (NFL) is one of the most popular and profitable professional sports leagues in the world. The NFL’s popularity has led to a surge in the collection of game data and analysis of this data. Football, due to its innate complexity, comprises of hundreds of variables for which data can be collected. These variables include offensive yards, touchdowns scored, passes intercepted, and much more. Furthermore, this data can be associated with individual players, coaches, and the team as whole which creates new ways in which the data can be interpreted. The implications of these statistics have created an avenue for computer applications (largely relying on the internet) where users can play “Fantasy” Football, predict and bet on games, view games live, and just plainly view the data itself. Furthermore, this data has led to the creation of new statistical measures to characterize players like the Quarterback Rating (QBR) which evaluates the proficiency of a Quarterback, the player that executes the offensive plays. \\
+
+\subsection{Problem Definition}
+The NFL provides access to most of the data it collects online for free. Various 3rd party companies also provide this data, and provide access to special data not easily made available by the NFL. While this data along with statistical measures are made available to the public, there is no major platform available on which users can extract custom statistics. Often on TV, a sports commentator will provide an elaborate statistic (e.g. player x has won the last 5 games against team y when the team of player x has 300 or more offensive yards) which will give more insight into the game, and interests fans in general. Currently, most fans rely on commentators to provide them with such insights as no major platform exists where they can resolve custom statistics.
+
+\subsection{Application Overview}
+StatAP will consist of a newly created database which will consist of a subset of the data provided by the NFL as it is unrealistic to include all of the data. Other data will be incorporated into this database including weather conditions during the game and location of the game. The goal is to build a tool where users can generate custom statistics which they may themselves declare to find insightful. The application will center around querying the custom database to find useful and relevant statistics of which there are too many to list on any single page.
+The data can be extracted online using data mining tools. There are websites that provide data in spreadsheet format as well. Data not associated with the NFL can be extracted easily as well.
+The application can be expanded in many ways. The most obvious is just to create more and more ways to query the database. Live data extraction can also be incorporated into the application. Furthermore, a model that can potentially predict games can be created and improved using our database by the principles of AI.
+\clearpage\null
+
+\section{Application Requirements Specifications}
+Go over the application requirements...
+
+\subsection{Homepage}
+The home page will mainly be used to navigate to either the Players or Teams section of the website which will be the two main sections. The home page may also display some interesting statistics, and explain how these statistics were arrived at to give users an idea on how to use the application. However, the home page itself will not have much other functionality.
+
+\subsection{Players View}
+The players page will show a list of every player, sorted by some default setting, such as alphabetical. On the top, there will be a number of ways to filter. There will be a select box and a search box, allowing you to do a text search, which would primarily be used to search by player name.  There would be other filters, such as selecting only players on a certain team, or selecting only quarterbacks who have thrown for more than 3000 yards in 2011. The list would show the results in a given amount at a time(defaulting to 30), and then paginate the result
+\begin{enumerate} 
+\item Positions(QB, RB, etc...)
+\item Search by player name
+\item Filter by statistics
+\item Filter by team
+\end{enumerate}
+
+\subsection{Teams View}
+B) The teams page will initially start out as a view of all of the teams sorted alphabetically with a search and filter bar at the top.  From a drop down box the user can choose to either keep the teams sorted alphabetically or by wconference and division. The order that divisions will show is AFC East, AFC North, AFC South, AFC West, NFC East, NFC North, NFC South, NFC West.  The search bar will be located in the top right hand side of the page allowing the user to type in a specific team name or city to quickly access team statistics they are looking for.  Some examples of the filters that could be entered include: only showing teams with over 60 wins in the last 10 years, teams that have quarterbacks with a rating above 100, etc.  
+\begin{enumerate}
+\item Conference, division
+\item Filter by statistics
+\item Search by team name
+\end{enumerate}
+
+\clearpage\null
+\section{Database Requirement}
+Put in a description
+
+\subsection{Entities}
+
+\subsubsection{Player}
+This table will hold all static values relevant to a certain player. This includes things like, the player’s position, name, id, etc. We will use this table to get information about a player that does not relate to their game stats.
+
+\subsubsection{Teams}
+The teams table is used to identify a team by its id or name and get information regarding that team.
+
+\subsubsection{Game}
+The games entity will contain all information relevant to a specific game, such as when it took place. This will be used to determine teams' win statistics. Since this entity will have an attribute for the home team and away team, we will be able to determine how much home-field advantage affects each team. We can also compare the weather of a certain game with its outcome.
+
+\subsection{Relations}
+
+\subsubsection{Player Team}
+This relation determines the team a particular played/plays for wit specified begin and end date.
+
+\subsubsection{Player Game}
+This relation specifies if a player played in a particular game.
+
+\clearpage\null
+
+%this needs a great bit of modification
+\section{Integrity Constraints}
+
+\subsubsection{Description}
+List any integrity constraints in general on the entities and relationships as a
+whole. Explain how you intend to enforce them; i.e., are you going to build enforcement
+mechanisms by: specifying sql constraints or triggers, applying database dependency theory, or applying exernal integrity enforcement. You must explicitly specify general constraints, triggers, and stored/external procedures.
+
+\subsubsection{Breakdown}
+At this stage of the project, it does not appear that the user will be allowed to modify the database itself. The database will be populated with freely available data from the internet. The user will be able to use complex queries to generate customized statistics which will not result in any change in the database. It is anticipated that users will restricted to what kind of input they can use i.e a user will not be able to enter any custom input but will be restricted. For example for a statistics filter the user will be limited from entering 1 to 500 only, due to the fact that this encompasses all possible values for a stat and prevents the user from using malicious input. This is why integrity constraints will not be a huge factor. The integrity constraints that may come into play are listed below:
+
+\begin{enumerate}
+\item Player name, stats, etc cannot be NULL
+\item player id team id as primary ke
+\item team id player id
+\end{enumerate}
+
+\clearpage\null
+
+\section{Queries}
+
+\subsection{5 Main Queries}
+
+\subsubsection{Determine a players career record against a given team}
+\begin{description}
+  \item[SQL] \hfill \\
+  The first item
+  \item[RA] \hfill \\
+  The second item
+  \item[TRC] \hfill \\
+  The third
+\end{description}
+
+\subsubsection{Other Queries}
+
+\begin{enumerate}
+\item Determining a teams win/loss record over a given period of time.
+\item Determining a teams record against an opposing team over a given period of time.
+\item Determining a teams record without a given player over a given period of time.
+\item Calculating a teams offensive/defensive yardage with or without a given player.
+\item Determining a teams performance based upon the weather conditions.
+\item Determining a teams performance at a given location/stadium.
+\item Finding out a teams best performance offensively or defensively in a given period of time.
+\item Selecting all players who match a given statistics filter (e.g select a player with x or more yards of offense).
+\item Find all players who have had x or more wins against team A.
+\item Rank all players based upon a given stat (e.g rushing yardage).
+\item Find two players that have combined for the most offensive yards in a given period of time.
+\item Determine a players career record against a given team.
+\item Determine a players career stats against a given team.
+\item Determine a players win/loss ratio if he generates x or more yards against a given team.
+\end{enumerate}
+
+\clearpage\null
+
+\section{Entity Relational Model}
+\subsection{Description}
+Specify the properties of each attribute (i.e., key, composite/simple, single‐valued/multi‐valued, derived, incomplete with different nulls, roles, weak/strong entity type, etc.). Specify the relationships and their attributes. List the properties of each relationship (i.e., degree of the relationship, cardinality ratio constraints (1‐1, 1‐N, N‐M), key constraints, participation constraints (total, partial), other application‐specific constraints, etc.).
+
+\subsection{StatAP ER Diagram}
+\begin{figure}
+\centering
+\includegraphics[scale=0.35]{images/example_figure.png}
+\caption{Example}
+\label{fig:home}
+\end{figure}
+
+\clearpage\null
+
+\section{Relational Model}
+Each entity should map to a (entity) relation, and each relationship should be accounted for (either represented in an entity relation or as a separate relation). Each entity/relationship attribute should be accounted for in the transformation. List for
+each relation the primary/candidate keys, foreign keys. Specify the entity and referential integrity constraints, and discuss why they are satisfied for each relation. Explicitly specify each relation using CREATE TABLE commands of SQL
+
+\clearpage\null
+
+\section{Database Implementation}
+
+\subsection{Description}
+Summarize the main components of your code here with proper explanations.
+If you are using SQLServer, present (using screen dumps of the query analyzer output,) the actual
+logical query trees for the five most difficult queries. Discuss any problems encountered and how
+you have solved them. If some of the problems require you to extensively redesign everything, you
+may choose to point them out, and not implement them. If some of your stored procedures are too
+elaborate, scale down your design, explain your decisions, and implement the scaled down version
+
+\subsection{Process}
+We are using MySQL for our DBMS. We set up the open source DBMS on your respective machines without any issues by using tools like YUM and APT-GET on the linux terminal. We also downloaded and installed MYSQL workbench in order to manage our database. As we are building a Ruby on Rails application, we created the database schema using Rails and used a Rails gem “Railtoady” to generate our relational diagram. However, we were not able to generate a nice ER diagram but we will have one done for the final report. Most of the commands we executed were through the command line interface. A screenshot of our DBMS is attached below.
+
+\subsection{SQL}
+%input SQL file here
+
+\clearpage\null
+
+\section{Relational Database Design}
+
+\subsection{Description}
+More specifically, define your functional dependencies, and find the minimal set of f.d.s. Are all your relations in BCNF or 3NF? If not, apply the algorithms you have seen in the class to decompose and make them BCNF/3NF. Note that your decompositions should be lossless and dependency preserving.
+
+\clearpage\null
+
+\section{Application Implementation}
+
+\subsection{Overview}
+We built this application using the Ruby on Rails framework which integrates several components together for quick development and deployment of a scalable web application.
+
+\subsection{Installation Manual}
+In order to install and run our application you must install the ruby and rails development environment on your machine. This environment is open source and compatible with Windows/Mac/Linux. We recommend using the Ruby Version Control Manager for installation. \footnote{You can get rails at: \url{http://guides.rubyonrails.org/getting_started.html}} Once you have installed the Ruby on Rails environment on your machine, please follow the following steps to run our application.
+
+\begin{enumerate}
+
+\item Visit our \href{http://www.github.com/aaronneyer/eecs-341}{Github repository}, and download the source code.\footnote{Github url: \url{https://github.com/Aaronneyer/eecs-341}}
+
+\item Open up a terminal and run {\bf bundle install} after going inside the eecs-341 directory (note that rails will automatically detect that this is a rails application).
+
+\item Now run {\bf rake db:create } followed by {\bf rake db:migrate}.
+
+\item Start the server by running {\bf rails s}.
+
+\item Finally open a web browser and visit {\bf localhost:3000}. \footnote{Please note rails uses port 3000 by default, you can specify the port with -p.}
+
+\end{enumerate}
+
+
+\clearpage\null
+\section{Appendix}
+
+% ============= References ==============
+%\newpage
+%\newpage
+%\begin{thebibliography}{6}
+%\end{thebibliography}
+
+% ============= Database Schematic ==============
+\subsection{User Manual}
+\clearpage\null
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.35]{images/example_figure.png}
+\caption{Example}
+\label{fig:home}
+\end{figure}
+
+\clearpage\null
+\subsection{Programmers Manual}
+
+% ============== END  ==============
+\end{document}
