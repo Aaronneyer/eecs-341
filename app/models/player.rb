@@ -5,7 +5,7 @@ class Player < ActiveRecord::Base
   has_many :games, through: :players_games
   has_many :players_years
 
-  scope :years_stats, -> {joins(:players_years => :stats)}
+  scope :years_stats, -> {joins(:players_years => :player_stats)}
 
   def current_team
     self.players_teams.order("end DESC, start DESC").first
