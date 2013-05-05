@@ -32,26 +32,31 @@
   <tbody>
     <% @player.players_years.each do |pyear| %>
       <tr class="year" data-year="<%=pyear.year%>">
-        <td><%= link_to_function pyear.year, "$('.game[data-year=#{pyear.year}]').toggle()" %></td>
+        <td><%= link_to pyear.year, "#", class: "year-toggle", data: {year: pyear.year} %></td>
         <% pyear.player_stats.attributes.each do |k,v| %>
           <% unless ["id", "created_at", "updated_at"].include? k %>
             <td><%=v%></td>
           <% end %>
         <% end %>
       </tr>
-      <% @player.players_games.joins(:game).where("games.year = ?", pyear.year).each do |pgame| %>
-        <tr class="game" data-year="<%=pyear.year%>">
-          <td><%=pgame.game.week%></td>
-          <% pgame.player_stats.attributes.each do |k,v| %>
-            <% unless ["id", "created_at", "updated_at"].include? k %>
-              <td><%=v%></td>
-            <% end %>
-          <% end %>
-        </tr>
-      <% end %>
     <% end %>
   </tbody>
 </table>
+
+<script>
+  $(".year-toggle").on("click", function(e){
+    e.preventDefault();
+    year = $(this).attr('data-year');
+    alert('.game[data-year='+year+']')
+    if($('.game[data-year='+year+']').length) {
+      $('.game[data-year='+year+']').toggle();
+    } else {
+      $.get("<%= games_player_path(@player) %>", {year: year}, function(data) {
+        $(this).append(data);
+      });
+    }
+  });
+</script>
 
 <%= link_to 'All Players', players_path %> |
 <%= link_to 'Search', search_players_path %>

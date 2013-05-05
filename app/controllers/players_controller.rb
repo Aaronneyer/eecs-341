@@ -32,4 +32,12 @@ class PlayersController < ApplicationController
     render :index
   end
 
+  def games
+    @year = params[:year]
+    @player = Player.find(params[:id])
+    @games = @player.players_games.joins(:game).where("games.year = ?", @year)
+    @json = @games.to_json
+    render partial: "games"
+  end
+
 end

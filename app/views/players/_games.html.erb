@@ -1,0 +1,11 @@
+<%= @json %>
+<% @games.each do |pgame| %>
+  <tr class="game" data-year="<%=@year%>">
+    <td><%=pgame.game.week%></td>
+    <% pgame.player_stats.attributes.each do |k,v| %>
+      <% unless ["id", "created_at", "updated_at"].include? k %>
+        <td><%=v%></td>
+      <% end %>
+    <% end %>
+  </tr>
+<% end %>

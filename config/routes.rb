@@ -10,8 +10,11 @@ Eecs341::Application.routes.draw do
       get :search
       get :results
     end
+    member do
+      get :games
+    end
   end
-  
+
   root to: "home#home"
 
 end
