@@ -17,6 +17,8 @@
 \usepackage{url}
 \usepackage{listings}
 \usepackage{hyperref}
+\usepackage{lscape}
+\usepackage{pdflscape}
 
 \usepackage{listings} %Code
 \lstset{language=Ruby, tabsize=4,framexleftmargin=5mm,breaklines=true}
@@ -49,8 +51,9 @@
 \begin{tabular}{ll}
 %--alphabetic order
 Bharat Gupta, Robert Mayer, Aaron Neyer, and Diego Waxemberg\\
-\today\\
+May 3, 2013
 Final Report
+Introduction to Databases EECS 341 Project
 \end{tabular}
 \end{center}
 
@@ -70,7 +73,7 @@ Final Report
 % =============== Index ===============
 
 \tableofcontents
-\listoffigures
+%\listoffigures
 
 % =============== Section ===============
 \newpage
@@ -80,16 +83,15 @@ Final Report
 The National Football League (NFL) is one of the most popular and profitable professional sports leagues in the world. The NFL’s popularity has led to a surge in the collection of game data and analysis of this data. Football, due to its innate complexity, comprises of hundreds of variables for which data can be collected. These variables include offensive yards, touchdowns scored, passes intercepted, and much more. Furthermore, this data can be associated with individual players, coaches, and the team as whole which creates new ways in which the data can be interpreted. The implications of these statistics have created an avenue for computer applications (largely relying on the internet) where users can play “Fantasy” Football, predict and bet on games, view games live, and just plainly view the data itself. Furthermore, this data has led to the creation of new statistical measures to characterize players like the Quarterback Rating (QBR) which evaluates the proficiency of a Quarterback, the player that executes the offensive plays. \\
 
 \subsection{Problem Definition}
-The NFL provides access to most of the data it collects online for free. Various 3rd party companies also provide this data, and provide access to special data not easily made available by the NFL. While this data along with statistical measures are made available to the public, there is no major platform available on which users can extract custom statistics. Often on TV, a sports commentator will provide an elaborate statistic (e.g. player x has won the last 5 games against team y when the team of player x has 300 or more offensive yards) which will give more insight into the game, and interests fans in general. Currently, most fans rely on commentators to provide them with such insights as no major platform exists where they can resolve custom statistics.
+The NFL provides access to most of the data it collects online for free. Various 3rd party companies also provide this data, and provide access to special data not easily made available by the NFL. While this data along with statistical measures are made available to the public, there is no major platform available on which users can extract custom statistics. Often on TV, a sports commentator will provide an elaborate statistic (e.g. player x has won the last 5 games against team y when the team of player x has 300 or more offensive yards) which will give more insight into the game, and interests fans in general. Currently, most fans rely on commentators to provide them with such insights as no major platform exists where they can resolve custom statistics. StatAP aims to give the public the ability to analyze NFL data by filling in various parameters themselves, and thereby giving them to ability to perform custom statistical analysis. In this way users can form their own conclusions based upon the information they extract from the StatAP application.
 
 \subsection{Application Overview}
-StatAP will consist of a newly created database which will consist of a subset of the data provided by the NFL as it is unrealistic to include all of the data. Other data will be incorporated into this database including weather conditions during the game and location of the game. The goal is to build a tool where users can generate custom statistics which they may themselves declare to find insightful. The application will center around querying the custom database to find useful and relevant statistics of which there are too many to list on any single page.
-The data can be extracted online using data mining tools. There are websites that provide data in spreadsheet format as well. Data not associated with the NFL can be extracted easily as well.
+StatAP will consist of a newly created database which will consist of a subset of the data provided by the NFL as it is unrealistic to include everything. The vision is to build a tool where users can generate custom statistics which they may find insightful. The application will center around querying the database to find useful and relevant statistics of which there are too many to list on any single page. The users will have the ability to run thousands of different queries because they will be able to enter a range of parameters to modify the results. \\
+The NFL data used by StatAP was acquired by crawling an online sports reference website\footnote{\url{http://www.pro-football-reference.com/}}. Data crawled and utilized in the application includes player and team statistics for games and whole years. These statistics included things like touchdowns, first downs, passing yards, rushing yards, and other notable football statistics. The user is given access to all the data stored in the application, and has the ability extract data in various ways to gain knowledge and insight about the player or team at hand. \\
 The application can be expanded in many ways. The most obvious is just to create more and more ways to query the database. Live data extraction can also be incorporated into the application. Furthermore, a model that can potentially predict games can be created and improved using our database by the principles of AI.
 \clearpage\null
 
 \section{Application Requirements Specifications}
-Go over the application requirements...
 
 \subsection{Homepage}
 The home page will mainly be used to navigate to either the Players or Teams section of the website which will be the two main sections. The home page may also display some interesting statistics, and explain how these statistics were arrived at to give users an idea on how to use the application. However, the home page itself will not have much other functionality.
@@ -104,52 +106,60 @@ The players page will show a list of every player, sorted by some default settin
 \end{enumerate}
 
 \subsection{Teams View}
-B) The teams page will initially start out as a view of all of the teams sorted alphabetically with a search and filter bar at the top.  From a drop down box the user can choose to either keep the teams sorted alphabetically or by wconference and division. The order that divisions will show is AFC East, AFC North, AFC South, AFC West, NFC East, NFC North, NFC South, NFC West.  The search bar will be located in the top right hand side of the page allowing the user to type in a specific team name or city to quickly access team statistics they are looking for.  Some examples of the filters that could be entered include: only showing teams with over 60 wins in the last 10 years, teams that have quarterbacks with a rating above 100, etc.  
+B) The teams page will initially start out as a view of all of the teams sorted alphabetically with a search and filter bar at the top. The search bar will be located in the top right hand side of the page allowing the user to type in a specific team name or city to quickly access team statistics they are looking for.  Some examples of the filters that could be entered include: only showing teams with over 60 wins in the last 10 years, teams that have quarterbacks with a rating above 100, etc.  
 \begin{enumerate}
 \item Conference, division
 \item Filter by statistics
 \item Search by team name
 \end{enumerate}
 
+\subsection{Search view}
+This is the most important view of the application. The page will reflect forms based upon queries defined by the designers. Users will be able to fill in parameters such as names and yardage to extract interesting results for themselves. There will be multiple search pages for different queries. These pages will be oriented towards players and teams.
+
 \clearpage\null
-\section{Database Requirement}
-Put in a description
-
+\section{Database Requirements}
 \subsection{Entities}
-
-\subsubsection{Player}
-This table will hold all static values relevant to a certain player. This includes things like, the player’s position, name, id, etc. We will use this table to get information about a player that does not relate to their game stats.
+\subsubsection{Players}
+The players table will contain basic information about a player. This will include the id of the player, their name, the position they play and a url to the statistics associated with the player. This table will be used as the entrance point for information about a player. 
 
 \subsubsection{Teams}
-The teams table is used to identify a team by its id or name and get information regarding that team.
+The teams entity is used to identify a team by their id or name and retrieve information about that team. The city the team is from, the team's short name, and whether the team is still active will all be contained in this table.
 
-\subsubsection{Game}
-The games entity will contain all information relevant to a specific game, such as when it took place. This will be used to determine teams' win statistics. Since this entity will have an attribute for the home team and away team, we will be able to determine how much home-field advantage affects each team. We can also compare the weather of a certain game with its outcome.
+\subsubsection{Games}
+The games entity is for connecting a certain game to the team statistics associated with that game. The games entity will have the id of the home and away teams for reference to the team, as well as the id for the statistics for the home and away teams. It will also contain the date of the game and the results. Since this entity will have an attribute for the home team and away team, how much home-field advantage affects each team can be determined.
+
+\subsubsection{PlayersStats}
+This table contains all statistical data for all players and will be used as the source of data.
+
+\subsubsection{TeamsStats}
+This entity contains all of the statistical data for a team and will be used as the source for team data.
 
 \subsection{Relations}
+\subsubsection{PlayersYears}
+This entity will associate a player with a certain year and contain the statistics for that player in this year. This table will be used to retrieve any statistic specific to a player for any given year. 
 
-\subsubsection{Player Team}
-This relation determines the team a particular played/plays for wit specified begin and end date.
+\subsubsection{PlayersTeams}
+The PlayersTeams table will relate a player to the team he played on during a certain time period. This entity will contain an id for the player and the team that can be used to find statistics about a team during a certain player's time with that team. 
+\subsubsection{PlayersGames}
+The PlayersGames entity connects many other tables. It contains a player id, game id, player statistics id, and team id. This table can be used to find the statistical information of a player or team for a certain game. 
 
-\subsubsection{Player Game}
-This relation specifies if a player played in a particular game.
-
+\subsubsection{TeamsYears}
+This entity will be used to get the statistics for a team or player in a given year. It contains the id of the team and the id to the statistics of the team and player.
 \clearpage\null
 
 %this needs a great bit of modification
 \section{Integrity Constraints}
 
-\subsubsection{Description}
-List any integrity constraints in general on the entities and relationships as a
-whole. Explain how you intend to enforce them; i.e., are you going to build enforcement
-mechanisms by: specifying sql constraints or triggers, applying database dependency theory, or applying exernal integrity enforcement. You must explicitly specify general constraints, triggers, and stored/external procedures.
-
 \subsubsection{Breakdown}
-At this stage of the project, it does not appear that the user will be allowed to modify the database itself. The database will be populated with freely available data from the internet. The user will be able to use complex queries to generate customized statistics which will not result in any change in the database. It is anticipated that users will restricted to what kind of input they can use i.e a user will not be able to enter any custom input but will be restricted. For example for a statistics filter the user will be limited from entering 1 to 500 only, due to the fact that this encompasses all possible values for a stat and prevents the user from using malicious input. This is why integrity constraints will not be a huge factor. The integrity constraints that may come into play are listed below:
+The application does not allow the user to modify the database itself. The main purpose of the application is for the user to extract meaningful subset of the data that is available. The user will be able to run complex queries to generate customized statistics which will not result in any change in the database. The user is restricted from entering data that conforms to what the application expects by using validations. For example for a statistics filter, the user will be limited from entering 1 to 1000 only, due to the fact that this encompasses all possible values for a stat and prevents the user from using malicious input. Another example is that the position of the player is simply selected from a dropdown and cannot be typed by the user. \\
+
+Since all of the data is crawled off the web, the application designers made sure to collect data in a consistent, accurate, and organized manner. This allows the application to minimally enforce integrity constraints since the application is solely focused on extract data. Time and energy was put in to giving the user meaningful 
+
+This is why integrity constraints will not be a huge factor. The integrity constraints that may come into play are listed below:
 
 \begin{enumerate}
-\item Because we are crawling data to fill our tables it is understood that none of these values will ever be null.  This allows us to not have any NOT NULL restraints.
-\item player\_id, team\_id, game\_id, players\_year\_id, players\_team\_id, players\_game\_id, team\_year\_id, player\_stats\_id, and team\_stats\_id are the primary keys of our relations.
+\item The data utilized by StatAP is crawled from the web which means almost all attributes have NOT NULL restraints.
+\item player\_id, team\_id, game\_id, players\_year\_id, players\_team\_id, players\_game\_id, team\_year\_id, player\_stats\_id, and team\_stats\_id are the primary keys of our relations therefore they are unique.
 \item game\_results can only be 0, 1, or 2. 0 being the home team, 1 being the away team, and 2 indicating a tie between the teams.
 \end{enumerate}
 
@@ -163,13 +173,13 @@ At this stage of the project, it does not appear that the user will be allowed t
   \item[English] \hfill \\
   Find the average number of yards a player has while playing in a game for a team between the years 2008 and 2010.
   \item[SQL] \hfill \\
-  The first item
+  \lstinputlisting{queries/query1}
   \item[RA] \hfill \\
   $Players\_Game\_y \leftarrow(\sigma_{year=2008\vee year=2009\vee year=2010}((\sigma_{team_name=input\_team}((\sigma_{player_name=input\_player}(Game \bowtie PlayersGame \bowtie Player)) \bowtie Team))))\\
   Players\_Game\_y_{average(\sigma(yardage))}$\\
   Yardage can equal rushing\_yards, passing\_yards, receiving\_yards, punt\_return\_yards, or kick\_return\_yards.
   \item[TRC] \hfill \\
-  $\{Average(t^{(1)} | (\exists g)(Games(g)\wedge (\exists p)(Player(p)\wedge (\exists T)(Team(T)\wedge (\exists py)(PlayerYear(py) \wedge (\exists pg)(PlayerGame(pg) \wedge (\exists ps)(PlayerStats(ps) \wedget[1] = ps.rushing\_yards\wedge\\
+  $\{Average(t^{(1)} | (\exists g)(Games(g) \wedge (\exists p)(Player(p) \wedge (\exists T)(Team(T) \wedge (\exists py)(PlayerYear(py) \wedge (\exists pg)(PlayerGame(pg) \wedge (\exists ps)(PlayerStats(ps) \wedge[1] = ps.rushing\_yards\wedge\\
 p.name = "input\_player" \wedge p.pid = py.pid \wedge (py.year = "2008" \vee py.year = "2009" \vee py.year = "2010")\wedge\\
 p.pid = pg.pid \wedge pg.tid = T.tid \wedge T.team\_name = "input\_team" \wedge pg.player\_stats\_id = ps.player\_stats\_id))))))\}$
 \end{description}
@@ -177,7 +187,7 @@ p.pid = pg.pid \wedge pg.tid = T.tid \wedge T.team\_name = "input\_team" \wedge 
   \item[English] \hfill \\
   Find the teams in any specific year that had a player get greater than or equal to a certain number of yards.
   \item[SQL] \hfill \\
-  The first item
+  \lstinputlisting{queries/query2}
   \item[RA] \hfill \\
   $PositionYear \leftarrow \sigma_{year=input\_year}((\sigma_{position = input\_position}Player) \bowtie PlayersYear)\\
   Yards \leftarrow \sigma_{passing\_yards\geq numyards}((PositionYear \bowtie PlayersGame) \bowtie PlayerStats)\\
@@ -191,7 +201,7 @@ p.pid = pg.pid \wedge pg.tid = T.tid \wedge T.team\_name = "input\_team" \wedge 
   \item[English] \hfill \\
   Find the city that has the most number of away team wins in a given year.
   \item[SQL] \hfill \\
-  The first item
+  \lstinputlisting{queries/query3}
   \item[RA] \hfill \\
   $AwayGames \leftarrow \sigma_{year=input\_year}((Team \bowtie_{team\_id = home\_team\_id} Game) \bowtie TeamYear)\\
   \Pi_{city}(AwayGames \bowtie TeamStats)_{max(\sigma(losses))}$
@@ -205,7 +215,7 @@ p.pid = pg.pid \wedge pg.tid = T.tid \wedge T.team\_name = "input\_team" \wedge 
   \item[English] \hfill \\
   Find the team with the most offensive yards in a given year.
   \item[SQL] \hfill \\
-  The first item
+  \lstinputlisting{queries/query4}
   \item[RA] \hfill \\
   $YearTeam \leftarrow (\sigma_{year}(Team \bowtie TeamYear))\\
   TotalYards \leftarrow (YearTeam \bowtie TeamStats)_{sum(offensive\_yards)}\\
@@ -214,13 +224,13 @@ p.pid = pg.pid \wedge pg.tid = T.tid \wedge T.team\_name = "input\_team" \wedge 
   $\{Max(t^{(1)}) | (\exists ts)(TeamStats(ts) \wedge t[1] = ts.offensive\_yards \wedge (\exists T)(Team(T) \wedge (\exists ty)(TeamYear(ty) \wedge 
   T.tid = ty.tid \wedge ty.team\_stats\_id = ts.team\_stats\_id)))\}\\
   \{u^{(2)} | (\exists T)(Team(T) \wedge u[1] = T.name \wedge u[2] = T.tid \wedge (\exists ty)(TeamYear(ty) \wedge (\exists ts)(TeamStats(ts) \wedge 
-  T.tid = ty.tid \wedge ty.team\_stats\_id = ts.team\_stats\_id \wedge ts.offensive\_yards = t[1])))\}
+  T.tid = ty.tid \wedge ty.team\_stats\_id = ts.team\_stats\_id \wedge ts.offensive\_yards = t[1])))\}$
 \end{description}
 \begin{description}
   \item[English] \hfill \\
   Find a teams average number of a specific type of yards for a given position in a given year.
   \item[SQL] \hfill \\
-  The first item
+  \lstinputlisting{queries/query5}
   \item[RA] \hfill \\
   $PlayerPosition \leftarrow (\sigma_{year=input\_year}(\sigma_{position=input\_position}(Player)) \bowtie PlayerYear)\\
   PositionStats \leftarrow (PlayerPosition \bowtie PlayersGame \bowtie PlayerStats)\\
@@ -235,7 +245,7 @@ p.pid = pg.pid \wedge pg.tid = T.tid \wedge T.team\_name = "input\_team" \wedge 
   \item[English] \hfill \\
   Find all players who played in all games in a given year for a given team.
   \item[SQL] \hfill \\
-  The first item
+  \lstinputlisting{queries/query6}
   \item[RA] \hfill \\
   $Games\_y \leftarrow \Pi_{Game\_id}(\sigma_{name="input\_name"}Team \bowtie_{team\_id} \sigma_{year="input\_year"}Games)\\
   Team\_Players\_y \leftarrow \Pi_{player\_id}(\sigma_{start\leq"input\_year" \wedge end\geq"input\_year"}PlayerTeam \bowtie_{team_id} \sigma_{name="input\_name"}Team)\\
@@ -267,48 +277,60 @@ p.pid = pg.pid \wedge pg.tid = T.tid \wedge T.team\_name = "input\_team" \wedge 
 
 \clearpage\null
 
-\section{Entity Relational Model}
-\subsection{Description}
-Specify the properties of each attribute (i.e., key, composite/simple, single‐valued/multi‐valued, derived, incomplete with different nulls, roles, weak/strong entity type, etc.). Specify the relationships and their attributes. List the properties of each relationship (i.e., degree of the relationship, cardinality ratio constraints (1‐1, 1‐N, N‐M), key constraints, participation constraints (total, partial), other application‐specific constraints, etc.).
+\section{Entity Relation Model}
+The ER model of this application is displayed on the next page. The model is formatted using standard practices to indicate primary keys, foreign keys, weak entities, participation constraints etc. A thorough overview of the database model is provided in the next section. Please note that the \textbf{Players Team} relation and \textbf{PlayersGame} relation were renamed to \textbf{Plays for} and \textbf{Plays in} in the ER diagram. This was done for the purposes of semantics so that the ER diagram read better.
 
-\subsection{StatAP ER Diagram}
-\begin{figure}
-\centering
-\includegraphics[scale=0.35]{images/example_figure.png}
-\caption{Example}
-\label{fig:home}
-\end{figure}
 
-\clearpage\null
+\includepdf[landscape=true]{images/statApp.pdf}
+
 
 \section{Relational Model}
-Each entity should map to a (entity) relation, and each relationship should be accounted for (either represented in an entity relation or as a separate relation). Each entity/relationship attribute should be accounted for in the transformation. List for
-each relation the primary/candidate keys, foreign keys. Specify the entity and referential integrity constraints, and discuss why they are satisfied for each relation. Explicitly specify each relation using CREATE TABLE commands of SQL
+The ER model above was translated into a relational model that accurate describes our actual database implementation. Please note that all of the data used to fill our database was acquired via web crawling and no user input is currently accepted in the application. Furthermore, none of the attributes in any relation are unfilled in any case. Only primary keys of relations are unique, and these keys are depicted as underlined. Foreign keys are indicated in red. 
+\\
+Note that the Game relation not only stores information about the game itself but foreign key references to the stats of the teams for that game and the teams themselves. Furthermore, the year field is stored as an attribute instead of its own entity. This due to the fact that no attributes can be stored in a year entity however the year itself is important in determining yearly information in our database.
+\\
+The player team relation has a start and end date because a player can not only play for multiple teams, but for the same team in one or more periods.
+\\
+The player statistics stored are more detailed than the team statistics scored because the statistics that the author's expect the users to find interesting reflect this. Also the data acquired was the most easily crawlable so that querying would be prioritized.\\
 
-\clearpage\null
+Lastly, the statistics attributes are not displayed in either the ER or relational model. This is simply due to the fact that there are too many to list and listing all of them does not reveal any insight about the database model. The player statistics and team statistics that are stored in our database can be viewed in section 11.3 of the appendix. 
+
+\includepdf[landscape=true]{images/relational_model.pdf}
+
 
 \section{Database Implementation}
 
-\subsection{Description}
-Summarize the main components of your code here with proper explanations.
-If you are using SQLServer, present (using screen dumps of the query analyzer output,) the actual
-logical query trees for the five most difficult queries. Discuss any problems encountered and how
-you have solved them. If some of the problems require you to extensively redesign everything, you
-may choose to point them out, and not implement them. If some of your stored procedures are too
-elaborate, scale down your design, explain your decisions, and implement the scaled down version
+\subsection{DBMS}
+The DBMS used for StatAP was Sqlite3. The reasoning behind using Sqlite3 was
+the lack of need for features offered by more heavy weight DBMS such as MySQL
+and PostgreSQL, as well as the convenience offered in transfer of data.
+The easy transfer of data is important for development, as to properly develop,
+you need the database to be populated, and populating the database takes a fair
+amount of time.\\
+Due to the nature of the application (extensive query), the primary keys of all tables were indexed using a built in Sqlite3 feature. Indexing greatly reduces the amount of time spent executing the querying and greatly improved the applications usability.
 
-\subsection{Process}
-We are using MySQL for our DBMS. We set up the open source DBMS on your respective machines without any issues by using tools like YUM and APT-GET on the linux terminal. We also downloaded and installed MYSQL workbench in order to manage our database. As we are building a Ruby on Rails application, we created the database schema using Rails and used a Rails gem “Railtoady” to generate our relational diagram. However, we were not able to generate a nice ER diagram but we will have one done for the final report. Most of the commands we executed were through the command line interface. A screenshot of our DBMS is attached below.
+\subsection{Obtaining Data}
+One of the large parts of the project was retrieving the data to populate the
+database. To do this, a web spider was built that scraped many pages of a
+popular sports reference website known as Pro Football Reference,
+and retrieved various information about players, teams, and games for
+professional football, dating as far back as 1920. \\
+The spider was one of the more challenging parts of the project, as it
+required extensive studying of the data on the website being scraped, to
+properly account for all possible cases on the various different pages. As data was extracted various changes were made to the spider and bugs had to be solved. While Pro Football Reference displays data in a very standardized manner there were some issues. For example offensive stats for players were stored in a table that was called "Rushing and Receiving", but also "Receiving and Rushing".\\
 
 \subsection{SQL}
+The SQL creation statements used to create our database are listed below.
 %input SQL file here
-
+\lstinputlisting{create_table.sql}
 \clearpage\null
 
 \section{Relational Database Design}
 
 \subsection{Description}
-More specifically, define your functional dependencies, and find the minimal set of f.d.s. Are all your relations in BCNF or 3NF? If not, apply the algorithms you have seen in the class to decompose and make them BCNF/3NF. Note that your decompositions should be lossless and dependency preserving.\\
+The database schema was analyzed, and the authors found it to be compliant with BCNF and therefore 3NF as well. The data model established is simple yet elegant. The vast majority of queries that we tested responded fairly quickly.\\ 
+There is some redundancy in our database in that we are storing yearly data as well as data on a game by game basis. This was done on purpose because the user is expected to very frequently query for yearly information which would have to be computed very redundantly. Furthermore, some of the queries the authors wanted to support would run more efficiently and strain our application much less with yearly data.\\
+
 1) Game \\
 Keys: \\
 $gid \to \{date, year, week, home\_team\_id, away\_team\_id, home\_team\_stat\_id, away\_team\_stat\_id, result\} \\
@@ -355,7 +377,11 @@ $team\_year\_id \to \{team\_id, player\_stats\_id, team\_stats\_id, year\}$\\
 \section{Application Implementation}
 
 \subsection{Overview}
-We built this application using the Ruby on Rails framework which integrates several components together for quick development and deployment of a scalable web application.
+This application using the Ruby on Rails framework which integrates several components together for quick development and deployment of a scalable web application. As indicated before, Sqlite3 was used to implement the database, and Rails makes it easy to setup and interact with the database directly from the application level code. Rails provides several gems which are essentially software packages that can be easily integrated into the application to add functionality. These gems allow the application to include powerful open source features including interfacing with the database, crawling web data, parsing HTML, and other important tasks. \\
+
+Very little work was put into the actual layout and appearance of the application. Twitter Bootstrap\footnote{\url{http://twitter.github.io/bootstrap/}} was used to provide a fluid and simple yet elegant design. Bootstrap is simply a CSS and Javascript collection that can easily be integrated into any web application providing almost every front-end functionality necessary in an minimalist but organized style. \\
+
+A significant portion of the application implementation work was done the database end for crawling the data. An extensive crawler was built using Nokogiri\footnote{\url{http://nokogiri.org/}} which is useful in parsing HTML, XML, and other popular languages. Essentially the crawler visited web pages in a sequential manner specified by the authors. For each age using table headers, data was obtained and directly inserted into the database as Nokogiri is based off of the Rails framework.
 
 \subsection{Installation Manual}
 In order to install and run our application you must install the ruby and rails development environment on your machine. This environment is open source and compatible with Windows/Mac/Linux. We recommend using the Ruby Version Control Manager for installation. \footnote{You can get rails at: \url{http://guides.rubyonrails.org/getting_started.html}} Once you have installed the Ruby on Rails environment on your machine, please follow the following steps to run our application.
@@ -374,7 +400,6 @@ In order to install and run our application you must install the ruby and rails 
 
 \end{enumerate}
 
-
 \clearpage\null
 \section{Appendix}
 
@@ -386,17 +411,102 @@ In order to install and run our application you must install the ruby and rails 
 
 % ============= Database Schematic ==============
 \subsection{User Manual}
+In this section, the main functionality of the application is explained for a naive user. In the next few pages, each of the main views is examined and the important features are illustrated. Not all views are shown, including redudant search views that where other various queries can be executed. However, these pages have the same user interaction as the main query page displayed. The views are taken from running the application on a local machine. \\
+The application is not in production, thus if a user must download and install it locally form Github. Please note that the data we have crawled is available on Github as well.
 \clearpage\null
+\begin{figure}
+\centering
+\includegraphics[scale=0.60]{images/home.png}
+\caption{This is the home page view where you are shown a player and team "of the moment (a randomly selected entity). From here you can navigate to the two main pages of interest, the Player page and the Team page.}
+\label{fig:home}
+\end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[scale=0.35]{images/example_figure.png}
-\caption{Example}
+\includegraphics[scale=0.60]{images/players.png}
+\caption{On the players page you can view every single player in the database. You can view more players by going to the next page. You can also go to the search or query page from this page.}
+\label{fig:home}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.60]{images/playerview.png}
+\caption{This page shows you an individual players statistics organized by year. By clicking on each year you can view the players per game stats. }
+\label{fig:home}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.60]{images/teams.png}
+\caption{The teams page displays all of the teams similarly to the players page. It is not as functional as the players page, however, you can view all teams and get more detailed information.}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.60]{images/teamview.png}
+\caption{Similar to the player view the view displays a teams statistical information organized by year. By clicking on each view you can view the statistical information on a per game basis.}
+\label{fig:home}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.60]{images/search.png}
+\caption{The query or search page can be used to extract data based upon parameters. As shown once you enter the parameters simply click search to view the results. Other query pages each have their own view with a similar style.}
 \label{fig:home}
 \end{figure}
 
 \clearpage\null
 \subsection{Programmers Manual}
+
+StatAP is implemented using Ruby on Rails. Rails uses an MVC framework,
+which has Models, Views, and Controllers. The models are the classes, which
+represent our tables in the database. For example, we have a Player class in
+our app/models directory, which maps to the players table in the database.\\
+
+Each of the models has code in it, identifying it's relationships with
+other tables, to allow for relational queries to be made. There can also
+be scopes defined, allowing for shortcuts for commonly used partial queries.
+For example, player.rb has the following scope: \begin{verbatim}
+scope :years_stats, -> {joins(:players_years => :players_stats)}\end{verbatim}
+
+The controllers handle rendering views with proper information.
+The controller containing the most logic is the players\_controller. This
+handles rendering everything within players, which is the index page, which
+shows all players, search page, which renders a search form to perform queries
+over the players, results, which handles the results of the search, and then show, which handles showing information about individual players.\\
+
+The player results controller takes information passed in from the user,
+and depending on what items are passed, it filters down the @players variable.
+For example, if there is a year or a statistic passed, it will take a natural
+join on players\_years and players\_stats using the years\_stats scope previously defined, and will filter @players where it matches the user input.
+It will then paginate the results, by limiting them to 30, and offsetting them
+dependent on the page number passed in the parameters. \\
+
+The views handle showing the actual information to the user. Again, the primary
+views are with players, although the team views are also heavily used. The views
+primarily correlate to the controller actions, although some are reused. For
+example, results renders the index view, because the method of showing information is equivalent for both, it just shows different information, dependent on the @players variable.
+The players show view will retrieve all stats for a given player by year and game
+and render them, with the games being initially hidden, and then shown when the user
+clicks on the year. The teams show view acts in a similar manner.\\
+
+To populate the database, a spider is used. This scrapes information from
+www.pro-football-reference.com using the 'open-uri' ruby gem, and then parses
+it with Nokogiri, which generates an HTML parse tree and allows for css selection.
+Using this, information is gathered on every player, team, and game. With the
+information gathered, active\_record statements are called to insert rows into
+the database for these various entities and relationships. This is a lengthy
+process and can take a few hours, as there are over 20,000 players, as well
+as many different games and teams.
+
+
+
+\clearpage\null
+\subsection{Player Statistics}
+\lstinputlisting{playerstats}
+\clearpage\null
+\subsection{Team Statistics}
+\lstinputlisting{teamstats}
 
 % ============== END  ==============
 \end{document}
