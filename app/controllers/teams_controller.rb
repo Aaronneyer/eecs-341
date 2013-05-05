@@ -1,5 +1,8 @@
 class TeamsController < ApplicationController
-  before_action :set_team, only: [:show]
+
+  def show
+    @team = Team.find(params[:id])
+  end
 
   # GET /teams
   # GET /teams.json
@@ -7,9 +10,10 @@ class TeamsController < ApplicationController
     @teams = Team.all
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_team
-      @team = Team.find(params[:id])
-    end
+  def games
+    @year = params[:year]
+    @team = Team.find(params[:id])
+    @games = @team.games.where("games.year = ?", @year).order("date")
+    render partial: "games"
+  end
 end

@@ -47,12 +47,13 @@
   $(".year-toggle").on("click", function(e){
     e.preventDefault();
     year = $(this).attr('data-year');
-    alert('.game[data-year='+year+']')
+    tr = $(this).parent().parent();
     if($('.game[data-year='+year+']').length) {
       $('.game[data-year='+year+']').toggle();
     } else {
       $.get("<%= games_player_path(@player) %>", {year: year}, function(data) {
-        $(this).append(data);
+        console.log(tr);
+        $(tr).after(data);
       });
     }
   });

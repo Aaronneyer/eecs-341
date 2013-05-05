@@ -22,25 +22,28 @@
   <tbody>
     <% @team.team_years.each do |tyear| %>
       <tr class="year" data-year="<%=tyear.year%>">
-        <td><%= link_to_function tyear.year, "$('.game[data-year=#{tyear.year}]').toggle()" %></td>
+        <td><%= link_to tyear.year, "#", class: "year-toggle", data: {year: tyear.year} %></td>
         <% tyear.team_stats.attributes.each do |k,v| %>
           <% unless ["id", "created_at", "updated_at"].include? k %>
             <td><%=v%></td>
           <% end %>
         <% end %>
       </tr>
-      <% @team.games.where("games.year = ?", tyear.year).order("date").each do |game| %>
-        <% if game.away_team_stats && game.home_team_stats %>
-          <tr class="game" data-year="<%=tyear.year%>">
-            <td><%=game.week%></td>
-            <% (game.home_team_id == @team.id ? game.home_team_stats : game.away_team_stats).attributes.each do |k,v| %>
-              <% unless ["id", "created_at", "updated_at"].include? k %>
-                <td><%=v%></td>
-              <% end %>
-            <% end %>
-          </tr>
-        <% end %>
-      <% end %>
     <% end %>
   </tbody>
 </table>
+
+<script>
+  $(".year-toggle").on("click", function(e){
+    e.preventDefault();
+    year = $(this).attr('data-year');
+    tr = $(this).parent().parent();
+    if($('.game[data-year='+year+']').length) {
+      $('.game[data-year='+year+']').toggle();
+    } else {
+      $.get("<%= games_team_path(@team) %>", {year: year}, function(data) {
+        $(tr).after(data);
+      });
+    }
+  });
+</script>

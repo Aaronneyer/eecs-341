@@ -1,0 +1,12 @@
+<% @games.each do |game| %>
+  <% if game.away_team_stats && game.home_team_stats %>
+    <tr class="game" data-year="<%=@year%>">
+      <td><%=game.week%></td>
+      <% (game.home_team_id == @team.id ? game.home_team_stats : game.away_team_stats).attributes.each do |k,v| %>
+        <% unless ["id", "created_at", "updated_at"].include? k %>
+          <td><%=v%></td>
+        <% end %>
+      <% end %>
+    </tr>
+  <% end %>
+<% end %>

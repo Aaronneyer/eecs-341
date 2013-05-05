@@ -3,7 +3,11 @@ Eecs341::Application.routes.draw do
 
   resources :games
 
-  resources :teams
+  resources :teams do
+    member do
+      get :games
+    end
+  end
 
   resources :players do
     collection do
