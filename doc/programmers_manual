@@ -1,0 +1,45 @@
+Programmers Manual:
+Our application is implemented using Ruby on Rails. Rails uses an MVC framework,
+which has Models, Views, and Controllers. The models are the classes, which
+represent our tables in the database. For example, we have a Player class in
+our app/models directory, which maps to the players table in the database.
+
+Each of the models has code in it, identifying it's relationships with
+other tables, to allow for relational queries to be made. There can also
+be scopes defined, allowing for shortcuts for commonly used partial queries.
+For example, player.rb has the following scope:
+scope :years_stats, -> {joins(:players_years => :players_stats)}
+
+The controllers handle rendering views with proper information.
+The controller containing the most logic is the players_controller. This
+handles rendering everything within players, which is the index page, which
+shows all players, search page, which renders a search form to perform queries
+over the players, results, which handles the results of the search, and then show
+which handles showing information about individual players.
+In the player results controller, it takes information passed in from the user,
+and depending on which things are passed, will filter down the @players variable.
+For example, if there is a year or a statistic passed, it will take a natural
+join on players_years and players_stats using the years_stats scope previously
+defined, and will filter @players where it matches the user input.
+It will then paginate the results, by limiting them to 30, and offsetting them
+dependent on the page number passed in the parameters.
+
+The views handle showing the actual information to the user. Again, the primary
+views are with players, although the team views are also heavily used. The views
+primarily correlate to the controller actions, although some are reused. For
+example, results renders the index view, because the method of showing information
+is equivalent for both, it just shows different information, dependent on
+the @players variable.
+The players show view will retrieve all stats for a given player by year and game
+and render them, with the games being initially hidden, and then shown when the user
+clicks on the year. The teams show view acts in a similar manner.
+
+To populate the database, a spider is used. This scrapes information from
+www.pro-football-reference.com using the 'open-uri' ruby gem, and then parses
+it with Nokogiri, which generates an HTML parse tree and allows for css selection.
+Using this, information is gathered on every player, team, and game. With the
+information gathered, active_record statements are called to insert rows into
+the database for these various entities and relationships. This is a lengthy
+process and can take a few hours, as there are over 20,000 players, as well
+as many different games and teams.
+
