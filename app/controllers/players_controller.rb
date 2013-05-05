@@ -14,4 +14,11 @@ class PlayersController < ApplicationController
     @title = @player.name
   end
 
+  def search
+  end
+  def results
+    @players = Player.where("name LIKE ?", "%#{params[:q]}").paginate(page: params[:page]).order("name")
+    @title = "Results"
+    render :index
+  end
 end
