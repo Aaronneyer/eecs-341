@@ -48,7 +48,7 @@ def scrape_team_year(doc, team, year)
   year_stats = get_table_hash(year_table)
   o = year_stats[0]
   d = year_stats[1]
-  ystats = TeamStats.new(wins: wins, losses: losses, ties: ties,
+  ystats = TeamStats.create(wins: wins, losses: losses, ties: ties,
                       points_scored: o["Pts"],
                       points_allowed: d["Pts"],
                       first_downs_made: o["1stD"],
@@ -61,8 +61,7 @@ def scrape_team_year(doc, team, year)
                       passing_yards_allowed: d["Passing_Yds"],
                       rushing_yards_allowed: d["Rushing_Yds"],
                       turnovers_gained: d["TO"])
-  t = TeamYear.new(team: team, year: year, team_stats_id: ystats.id)
-
+  TeamYear.create(team: team, year: year, team_stats_id: ystats.id)
   game_stats = get_table_hash(game_table)
   game_stats.each do |g|
     if g["Date"].present?
