@@ -1,0 +1,12 @@
+<%= form_tag(results_teams_path, method: :get) do %>
+  <%= label_tag(:search) %>
+  <%= text_field_tag(:search) %>
+  <br />
+  <%= label_tag(:year) %>
+  <%= select_tag(:year, options_for_select([""] + (1920..2012).to_a.reverse)) %>
+  <br />
+  <%= label_tag(:stats, "Minimum in a Season") %>
+  <%= text_field_tag(:stats) %>
+  <br />
+  <%= submit_tag("Search") %>
+<% end %>
