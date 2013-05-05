@@ -153,6 +153,10 @@ task :loadgames => :environment do
   require 'open-uri'
   Player.all.each do |player|
     url = player.url.sub(/\.htm$/, "/gamelog/")
+    if player.players_games.present?
+      puts "Skipping #{player.name}"
+      next
+    end
     game_doc = Nokogiri::HTML(open(url))
     table = game_doc.css("#stats")
     puts "Starting on #{player.name}"
