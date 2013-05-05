@@ -2,7 +2,7 @@
 <%= link_to "Search", search_players_path %>
 
 <%= will_paginate @players, :renderer => BootstrapPagination::Rails %>
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Position</th>

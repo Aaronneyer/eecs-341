@@ -21,11 +21,13 @@ class PlayersController < ApplicationController
 
   def results
     players = Player.arel_table
-    @players = Player.where(players[:name].matches("%#{params[:q]}%"))
-    @players = @players.years_stats
+    @players = Player.years_stats
+    @players = @players.where(players[:name].matches("%#{params[:search]}%")) if params[:search].present?
     @players = @players.where(players[:position].matches("%#{params[:position]}%")) if params[:position].present?
     @players = @players.where("players_years.year = ?", params[:year]) if params[:year].present?
     @players = @players.where("player_stats.#{params[:filter_by]} >= ?", params[:stats]) if params[:filter_by].present? && params[:stats].present?
+    @players = @players.uniq
+    File.open("query_file", "a"){|f| f.puts(@players.to_sql)}
     @players = @players.uniq.paginate(page: params[:page]).order("name")
     @title = "Results"
     render :index

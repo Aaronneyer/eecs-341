@@ -5,12 +5,22 @@
         <li>Name: <%= @randplayer.name %></li>
         <li>Year: <%= @lastyear.year %></li>
         <% @lastyear.player_stats.attributes.each do |k,v| %>
-          <li><%= k.titleize %>: <%= v %></li>
+          <% if v.present? && !["id", "created_at", "updated_at"].include?(k) %>
+            <li><%= k.titleize %>: <%= v %></li>
+          <% end %>
         <% end %>
       </ul>
     </div>
     <div class="span6 well">
-      <%= @randteam %>
+      <ul>
+        <li>Name: <%= "#{@randteam.city} #{@randteam.name}" %></li>
+        <li>Week: <%= @recentgame.week %></li>
+        <% @recentgame.home_team_stats.attributes.each do |k,v| %>
+          <% if v.present? && !["id", "created_at", "updated_at", "wins", "losses", "ties"].include?(k) %>
+            <li><%= k.titleize %>: <%= v %></li>
+          <% end %>
+        <% end %>
+      </ul>
     </div>
   </div>
 </div>

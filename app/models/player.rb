@@ -7,12 +7,12 @@ class Player < ActiveRecord::Base
   scope :years_stats, -> {joins(:players_years => :player_stats)}
 
   def current_team
-    self.players_teams.order("end DESC, start DESC").first
+    self.players_teams.order("end DESC, start DESC").first.team
   end
 
   def current_team_name
     begin
-      current_team.name
+      "#{current_team.city} #{current_team.name}"
     rescue
       ""
     end

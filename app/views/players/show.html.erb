@@ -10,5 +10,48 @@
   <%= @player.name %>
 </p>
 
-<%= link_to 'Edit', edit_player_path(@player) %> |
-<%= link_to 'Back', players_path %>
+<p>
+  <strong>Years Active:</strong>
+  <%= @player.years_active %>
+</p>
+
+<p>
+  <strong>Current Team:</strong>
+  <%= @player.current_team_name %>
+</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Year/Week</th>
+      <% (PlayerStats.column_names-["id", "created_at", "updated_at"]).each do |c| %>
+        <th><%= c.titleize %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @player.players_years.each do |pyear| %>
+      <tr class="year" data-year="<%=pyear.year%>">
+        <td><%= link_to_function pyear.year, "$('.game[data-year=#{pyear.year}]').toggle()" %></td>
+        <% pyear.player_stats.attributes.each do |k,v| %>
+          <% unless ["id", "created_at", "updated_at"].include? k %>
+            <td><%=v%></td>
+          <% end %>
+        <% end %>
+      </tr>
+      <% @player.players_games.joins(:game).where("games.year = ?", pyear.year).each do |pgame| %>
+        <tr class="game" data-year="<%=pyear.year%>">
+          <td><%=pgame.game.week%></td>
+          <% pgame.player_stats.attributes.each do |k,v| %>
+            <% unless ["id", "created_at", "updated_at"].include? k %>
+              <td><%=v%></td>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'All Players', players_path %> |
+<%= link_to 'Search', search_players_path %>
