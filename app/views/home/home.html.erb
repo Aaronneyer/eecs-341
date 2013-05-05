@@ -1,8 +1,9 @@
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span6 well">
+      <h3>Player of the Moment</h3>
       <ul>
-        <li>Name: <%= @randplayer.name %></li>
+        <li>Player: <%= @randplayer.name %></li>
         <li>Year: <%= @lastyear.year %></li>
         <% @lastyear.player_stats.attributes.each do |k,v| %>
           <% if v.present? && !["id", "created_at", "updated_at"].include?(k) %>
@@ -12,8 +13,10 @@
       </ul>
     </div>
     <div class="span6 well">
+      <h3>Team of the Moment</h3>
       <ul>
-        <li>Name: <%= "#{@randteam.city} #{@randteam.name}" %></li>
+        <li>Team: <%= "#{@randteam.city} #{@randteam.name}" %></li>
+        <li>Year: <%= @recentgame.year %></li>
         <li>Week: <%= @recentgame.week %></li>
         <% @recentgame.home_team_stats.attributes.each do |k,v| %>
           <% if v.present? && !["id", "created_at", "updated_at", "wins", "losses", "ties"].include?(k) %>

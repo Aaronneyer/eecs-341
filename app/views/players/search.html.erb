@@ -9,7 +9,7 @@
   <%= select_tag(:year, options_for_select([""] + (1920..2012).to_a.reverse)) %>
   <br />
   <%= label_tag(:filter_by) %>
-  <%= select_tag(:filter_by, options_for_select(@stats)) %>
+  <%= select_tag(:filter_by, options_for_select([""] + @stats)) %>
   <br />
   <%= label_tag(:stats, "Minimum in a Season") %>
   <%= text_field_tag(:stats) %>

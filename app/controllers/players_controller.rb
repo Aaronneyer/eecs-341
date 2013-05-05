@@ -27,8 +27,7 @@ class PlayersController < ApplicationController
     @players = @players.where("players_years.year = ?", params[:year]) if params[:year].present?
     @players = @players.where("player_stats.#{params[:filter_by]} >= ?", params[:stats]) if params[:filter_by].present? && params[:stats].present?
     @players = @players.uniq
-    File.open("query_file", "a"){|f| f.puts(@players.to_sql)}
-    @players = @players.uniq.paginate(page: params[:page]).order("name")
+    @players = @players.paginate(page: params[:page]).order("name")
     @title = "Results"
     render :index
   end

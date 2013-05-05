@@ -1,20 +1,44 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
-  <%= @team.name %>
-</p>
-
-<p>
   <strong>City:</strong>
   <%= @team.city %>
 </p>
 
 <p>
-  <strong>Shortname:</strong>
-  <%= @team.shortname %>
+  <strong>Name:</strong>
+  <%= @team.name %>
 </p>
 
-
-<%= link_to 'Edit', edit_team_path(@team) %> |
-<%= link_to 'Back', teams_path %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Year/Week</th>
+      <% (TeamStats.column_names-["id", "created_at", "updated_at"]).each do |c| %>
+        <th><%= c.titleize %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @team.team_years.each do |tyear| %>
+      <tr class="year" data-year="<%=tyear.year%>">
+        <td><%= link_to_function tyear.year, "$('.game[data-year=#{tyear.year}]').toggle()" %></td>
+        <% tyear.team_stats.attributes.each do |k,v| %>
+          <% unless ["id", "created_at", "updated_at"].include? k %>
+            <td><%=v%></td>
+          <% end %>
+        <% end %>
+      </tr>
+      <% @team.games.where("games.year = ?", tyear.year).each do |tgame| %>
+        <tr class="game" data-year="<%=tyear.year%>">
+          <td><%=tgame.game.week%></td>
+          <% tgame.team_stats.attributes.each do |k,v| %>
+            <% unless ["id", "created_at", "updated_at"].include? k %>
+              <td><%=v%></td>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
