@@ -159,10 +159,8 @@ At this stage of the project, it does not appear that the user will be allowed t
 
 \subsection{5 Main Queries}
 
-\subsubsection{Determine a players career record against a given team}
+\subsubsection{Find the average number of yards Chris Johnson has while playing in a game for the Titans between the years 2008 and 2010.}
 \begin{description}
-  \item[English] \hfill \\
-  Find the average number of yards Chris Johnson has while playing in a game for the Titans between the years 2008 and 2010.
   \item[SQL] \hfill \\
   The first item
   \item[RA] \hfill \\
@@ -170,38 +168,38 @@ At this stage of the project, it does not appear that the user will be allowed t
   ChrisGames_{average(\sigma(yardage))}$\\
   Yardage can equal rushing\_yards, passing\_yards, receiving\_yards, punt\_return\_yards, or kick\_return\_yards.
   \item[TRC] \hfill \\
-  $\{Average(t^{(1)} | \exists g(Games(g)\wedge \exists p(Player(p)\wedge \exists T(Team(T)\wedge \exists py(PlayerYear(py) \wedge \exists pg(PlayerGame(pg) \wedge \exists ps(PlayerStats(ps) \wedget[1] = ps.rushing\_yards\wedge\\
+  $\{Average(t^{(1)} | (\exists g)(Games(g)\wedge (\exists p)(Player(p)\wedge (\exists T)(Team(T)\wedge (\exists py)(PlayerYear(py) \wedge (\exists pg)(PlayerGame(pg) \wedge (\exists ps)(PlayerStats(ps) \wedget[1] = ps.rushing\_yards\wedge\\
 p.name = "Chris Johnson" \wedge p.pid = py.pid \wedge (py.year = "2008" \vee py.year = "2009" \vee py.year = "2010")\wedge\\
 p.pid = pg.pid \wedge pg.tid = T.tid \wedge T.team\_name = "Titans" \wedge pg.player\_stats\_id = ps.player\_stats\_id))))))\}$
 \end{description}
+\subsubsection{Find the teams in any specific year that had a player get greater than or equal to a certain number of yards.}
 \begin{description}
-  \item[English] \hfill \\
-  Find the teams in any specific year that had a player get greater than or equal to a certain number of yards.
   \item[SQL] \hfill \\
   The first item
   \item[RA] \hfill \\
-  $PositionYear \leftarrow \sigma_{year=specyear}((\sigma_{position = player}Player) \bowtie PlayersYear)\\
+  $PositionYear \leftarrow \sigma_{year=input\_year}((\sigma_{position = input\_position}Player) \bowtie PlayersYear)\\
   Yards \leftarrow \sigma_{passing\_yards\geq numyards}((PositionYear \bowtie PlayersGame) \bowtie PlayerStats)\\
   \Pi_{team\_name}(Yards \bowtie Team)$
   \item[TRC] \hfill \\
-  $\{t^{(2)} | \exists p(Player(p)\wedge \exists T(Team(T)\wedge \exists py(PlayerYear(py) \wedge \exists pg(PlayerGame(pg) \wedge \exists ps(PlayerStats(ps)\wedge t[1] = T.name \wedge t[2] = T.tid \wedge\\
-  p.pid = py.pid \wedge p.position = "position" \wedge py.year = "specyear" \wedge p.pid = pg.pid \wedge
+  $\{t^{(2)} | (\exists p)(Player(p)\wedge (\exists T)(Team(T)\wedge (\exists py)(PlayerYear(py) \wedge (\exists pg)(PlayerGame(pg) \wedge (\exists ps)(PlayerStats(ps)\wedge t[1] = T.name \wedge t[2] = T.tid \wedge\\
+  p.pid = py.pid \wedge p.position = "input\_position" \wedge py.year = "input\_year" \wedge p.pid = pg.pid \wedge
   pg.player\_stat\_id = ps.player\_stat\_id \wedge ps.yards \geq numyards \wedge pg.tid = T.tid)))))\}$
 \end{description}
+\subsubsection{Find the city that has the most number of away team wins in a given year.}
 \begin{description}
-  \item[English] \hfill \\
-  Find the city that has the most number of away team wins in a given year.
   \item[SQL] \hfill \\
   The first item
   \item[RA] \hfill \\
-  $AwayGames \leftarrow \sigma_{year=specyear}((Team \bowtie_{team\_id = home\_team\_id} Game) \bowtie TeamYear)\\
+  $AwayGames \leftarrow \sigma_{year=input\_year}((Team \bowtie_{team\_id = home\_team\_id} Game) \bowtie TeamYear)\\
   \Pi_{city}(AwayGames \bowtie TeamStats)_{max(\sigma(losses))}$
   \item[TRC] \hfill \\
-  The third
+  $\{Max(t^{(1)}) | {\exists T}(Team(T) \wedge (\exists g)(Game(g) \wedge (\exists ty) (TeamYear(ty) \wedge (\exists ts)(TeamStats(ts) \wedge t[1] = ts.losses \wedge\\
+  T.tid = G.home\_team\_id \wedge T.tid = ty.tid \wedge ty.year = "input\_year" \wedge ty.team\_stats\_id = ts.team\_stats\_id))))\}\\
+  \{Max(u^{(1)}) | (\exists T)(Team(T) \wedge t[1] = T.city \wedge (\exists g)(Game(g) \wedge (\exists ty) (TeamYear(ty) \wedge (\exists ts)(TeamStats(ts) \wedge\\
+  T.tid = G.home\_team\_id \wedge T.tid = ty.tid \wedge ty.year = "input\_year" \wedge ty.team\_stats\_id = ts.team\_stats\_id \wedge ts.losses = t[1]))))\}$
 \end{description}
+\subsubsection{Find the team with the most offensive yards in a given year.}
 \begin{description}
-  \item[English] \hfill \\
-  Find the team with the most offensive yards in a given year.
   \item[SQL] \hfill \\
   The first item
   \item[RA] \hfill \\
@@ -209,21 +207,39 @@ p.pid = pg.pid \wedge pg.tid = T.tid \wedge T.team\_name = "Titans" \wedge pg.pl
   TotalYards \leftarrow (YearTeam \bowtie TeamStats)_{sum(offensive\_yards)}\\
   \Pi_{team\_name}(TotalYards_{max(\sigma(offensive_yards))})$
   \item[TRC] \hfill \\
-  The third
+  $\{Max(t^{(1)}) | (\exists ts)(TeamStats(ts) \wedge t[1] = ts.offensive\_yards \wedge (\exists T)(Team(T) \wedge (\exists ty)(TeamYear(ty) \wedge \\
+  T.tid = ty.tid \wedge ty.team\_stats\_id = ts.team\_stats\_id)))\}\\
+  \{u^{(2)} | (\exists T)(Team(T) \wedge u[1] = T.name \wedge u[2] = T.tid \wedge (\exists ty)(TeamYear(ty) \wedge (\exists ts)(TeamStats(ts) \wedge 
+  T.tid = ty.tid \wedge ty.team\_stats\_id = ts.team\_stats\_id \wedge ts.offensive\_yards = t[1])))\}
 \end{description}
+\subsubsection{Find a teams average number of a specific type of yards for a given position in a given year.}
 \begin{description}
-  \item[English] \hfill \\
-  Find a teams average number of a specific type of yards for a given position in a given year.
   \item[SQL] \hfill \\
   The first item
   \item[RA] \hfill \\
-  $PlayerPosition \leftarrow (\sigma_{year=specyear}(\sigma_{position=specposition}(Player)) \bowtie PlayerYear)\\
+  $PlayerPosition \leftarrow (\sigma_{year=input\_year}(\sigma_{position=input\_position}(Player)) \bowtie PlayerYear)\\
   PositionStats \leftarrow (PlayerPosition \bowtie PlayersGame \bowtie PlayerStats)\\
-  \Pi_{yardage}(PositionStats_{average(\sigma(yardage))})$\\
+  \Pi_{yardage}((PositionStats \bowtie Team)_{average(\sigma(yardage))})$\\
   Yardage can equal rushing\_yards, passing\_yards, receiving\_yards, punt\_return\_yards, or kick\_return\_yards.
   \item[TRC] \hfill \\
-  The third
+  $\{Average(t^{(1)}) | (\exists ps)(PlayerStats(ps) \wedge t[1] = ps.yardage \wedge (\exists p)(Player(p) \wedge (\exists py)(PlayerYear(py) \wedge \\
+  p.position = "input\_position" \wedge p.pid = py.pid  \wedge py.year = "input\_year" \wedge (\exists T)(Team(T) \wedge (\exists pg)(PlayerGame(pg) \wedge  \\
+  p.pid = pg.pid \wedge pg.tid = T.tid \wedge T.name = "input\_name" \wedge pg.player\_stats\_id = ps.player\_stats\_id)))))\}$
 \end{description}
+\subsubsection{.}
+\begin{description}
+  \item[SQL] \hfill \\
+  The first item
+  \item[RA] \hfill \\
+  $Games\_y \leftarrow \Pi_{Game\_id}(\sigma_{name="input\_name"}Team \bowtie_{team\_id} \sigma_{year="input\_year"}Games)\\
+  Team\_Players\_y \leftarrow \Pi_{player\_id}(\sigma_{start\leq"input\_year" \wedge end\geq"input\_year"}PlayerTeam \bowtie_{team_id} \sigma_{name="input\_name"}Team)\\
+  (Team\_Players\_y \bowtie_{player\_id} PlayerGame) / Games\_y$
+  \item[TRC] \hfill \\
+  $\{t^{(2)} | (\exists p)(Player(p) \wedge (t[1] = p.pid \wedge r[2] = p.name) \wedge (\exists T)(Team(T) \wedge T.name = "input\_name" \wedge \\
+  (\exists pt)(PlayerTeam(pt) \wedge pt.pid = p.pid \wedge pt.tid = T.tid \wedge pt.startdate \leq input\_year \wedge pt.enddate \geq input\_year \wedge \\
+  (\forall g)(Game(g) \wedge g.year = input\_year \wedge (g.home\_team\_id = t.tid \vee g.away\_team\_id = t.tid) \to (\exists pg)(PlayerGame(pg) \wedge \\
+  pg.pid = p.pid \wedge pg.gid = g.gid \wedge pg.tid = t.tid)))))\}$
+  \end{description}
 \subsubsection{Other Queries}
 
 \begin{enumerate}
@@ -287,6 +303,45 @@ We are using MySQL for our DBMS. We set up the open source DBMS on your respecti
 
 \subsection{Description}
 More specifically, define your functional dependencies, and find the minimal set of f.d.s. Are all your relations in BCNF or 3NF? If not, apply the algorithms you have seen in the class to decompose and make them BCNF/3NF. Note that your decompositions should be lossless and dependency preserving.
+1) Game \\
+Keys: \\
+$gid \to \{date, year, week, home\_team\_id, away\_team\_id, home\_team\_stat\_id, away\_team\_stat\_id, result\} \\
+home\_team\_stat\_id \to \{determines everything\}\\
+away\_team\_stat\_id \to \{determines everything\}$ \\
+\\
+2) Player\\
+Keys:\\
+$pid \to \{position, name, url\}\\
+url \to \{determines everything\}$\\
+\\
+3) Team\\
+Keys:\\
+$tid \to \{name, city, active\} \\
+name \to \{determines everything\}$\\
+\\
+4) PlayerTeam\\
+Keys: \\
+$\{\} empty set$\\
+\\
+5) PlayerGame\\
+Keys: \\
+$\{\} empty set$\\
+\\
+6) PlayerStats\\
+Keys:\\
+$player\_stats\_id \to \{determines everything\}$\\
+\\
+7) TeamStats\\
+Keys:\\
+$team\_stats\_id \to \{determines everything\}$\\
+\\
+8) PlayersYear\\
+Keys: \\
+$player\_year\_id \to \{player\_id, year, player\_stats\_id\}$\\
+\\
+9) TeamYear\\
+Keys: \\
+$team\_year\_id \to \{team\_id, player\_stats\_id, team\_stats\_id, year\}$\\
 
 \clearpage\null
 
