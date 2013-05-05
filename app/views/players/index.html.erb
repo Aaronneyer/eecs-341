@@ -1,4 +1,5 @@
 <h1>All Players</h1>
+<%= link_to "Search", search_players_path %>
 
 <%= will_paginate @players, :renderer => BootstrapPagination::Rails %>
 <table>
@@ -6,6 +7,8 @@
     <tr>
       <th>Position</th>
       <th>Name</th>
+      <th>Years Active</th>
+      <th>Current Team</th>
     </tr>
   </thead>
 
@@ -14,6 +17,8 @@
     <tr>
       <td><%= player.position %></td>
       <td><%= link_to player.name, player %></td>
+      <td><%= player.years_active %></td>
+      <td><%= player.current_team_name %></td>
     </tr>
     <% end %>
   </tbody>

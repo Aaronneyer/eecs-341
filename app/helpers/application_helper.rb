@@ -1,6 +1,6 @@
 module ApplicationHelper
   def page_title
-    base = "StatApp"
+    base = "StatAp"
     if @title
       return "#{base} | #{@title}"
     else

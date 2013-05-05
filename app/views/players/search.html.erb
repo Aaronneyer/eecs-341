@@ -1,8 +1,18 @@
-
-<%= form_tag("/players/results", :method => "get") do %>
-  <%= label_tag(:q, "Search for:") %>
-  <%= text_field_tag(:q) %>
+<%= form_tag(results_players_path, method: :post) do %>
+  <%= label_tag(:search) %>
+  <%= text_field_tag(:search) %>
+  <br />
+  <%= label_tag(:position) %>
+  <%= select_tag(:position, options_for_select([""] + @positions)) %>
+  <br />
+  <%= label_tag(:year) %>
+  <%= select_tag(:year, options_for_select([""] + (1920..2012).to_a.reverse)) %>
+  <br />
+  <%= label_tag(:filter_by) %>
+  <%= select_tag(:filter_by, options_for_select(@stats)) %>
+  <br />
+  <%= label_tag(:stats, "Minimum in a Season") %>
+  <%= text_field_tag(:stats) %>
+  <br />
   <%= submit_tag("Search") %>
 <% end %>
-
-

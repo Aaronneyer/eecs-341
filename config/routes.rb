@@ -8,7 +8,7 @@ Eecs341::Application.routes.draw do
   resources :players do
     collection do
       get :search
-      get :results
+      post :results
     end
   end
   
