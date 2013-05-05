@@ -34,7 +34,6 @@ task :teamstats => :environment do
     rows.each do |tr|
       td = tr.children.css("td").first
       year = td.content.to_i
-      break if year<2000
       year_doc = Nokogiri::HTML(open("#{base_url}#{team.shortname}/#{td.content}.htm"))
       scrape_team_year(year_doc, team, year)
     end
@@ -138,7 +137,7 @@ task :loadyears => :environment do
     links = position_doc.css("pre a")
     players = []
     links.each do |l|
-      players << ["#{base_url}#{l.attribute("href").value}", l.content] if /^A/ === l.content
+      players << ["#{base_url}#{l.attribute("href").value}", l.content]
     end
     players.each do |player|
       if p=Player.find_by_url(player[0])
@@ -171,7 +170,7 @@ def get_player_info(url, name)
     position = ""
   end
   player = Player.create(position: position, name: name, url: url)
-  tables = ["#rushing_and_receiving", "#defense", "#passing", "#returns", "#kicking"]
+  tables = ["#rushing_and_receiving", "#receiving_and_rushing", "#defense", "#passing", "#returns", "#kicking"]
   tables.each do |table|
     temp = doc.css(table)
     scrape_table(temp, table, player) unless temp.empty?
@@ -301,6 +300,13 @@ def scrape_table(table, id, player)
     pyear.player_stats ||= PlayerStats.new
     case id
     when "#rushing_and_receiving"
+      pyear.player_stats.assign_attributes(rushing_attempts: year["Rushing_Att"],
+                                    rushing_yards: year["Rushing_Yds"],
+                                    rushing_touchdowns: year["Rushing_TD"],
+                                    receptions: year["Receiving_Rec"],
+                                    receiving_yards: year["Receiving_Yds"],
+                                    receiving_touchdowns: year["Receiving_TD"])
+    when "#receiving_and_rushing"
       pyear.player_stats.assign_attributes(rushing_attempts: year["Rushing_Att"],
                                     rushing_yards: year["Rushing_Yds"],
                                     rushing_touchdowns: year["Rushing_TD"],
