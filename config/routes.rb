@@ -4,6 +4,10 @@ Eecs341::Application.routes.draw do
   resources :games
 
   resources :teams do
+    collection do
+      get :search
+      get :results
+    end
     member do
       get :games
     end

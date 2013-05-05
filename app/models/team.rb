@@ -4,7 +4,8 @@ class Team < ActiveRecord::Base
   has_many :team_years
   has_many :players_teams
   has_many :players, through: :players_teams
-
+  scope :years_stats, -> {joins(:team_years => :team_stats)}
+  
   def self.active_teams
     self.where(active: true)
   end
