@@ -17,4 +17,8 @@ class Team < ActiveRecord::Base
   def games
     Game.where("home_team_id = ? OR away_team_id = ?", id, id)
   end
+
+  def self.all_teams
+    self.all.collect(&:name).flatten
+  end
 end

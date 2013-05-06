@@ -16,6 +16,7 @@ class PlayersController < ApplicationController
 
   def search
     @positions = Player.all_positions
+    @allteams = Team.all_teams 
     @stats = (PlayerStats.column_names - ["id", "created_at", "updated_at"]).map{|c| [c.titleize, c]}
   end
 
@@ -37,6 +38,18 @@ class PlayersController < ApplicationController
     @player = Player.find(params[:id])
     @games = @player.players_games.joins(:game).where("games.year = ?", @year)
     render partial: "games"
+  end
+
+  # Given a team and a year, find all players that have played in all games for their team in that year.
+  def playallgames
+    funkyids = Player.find_by_sql("SELECT p.id  FROM players p, players_teams pt, teams t WHERE p.id = pt.player_id AND pt.start <= #{params[:year]}  AND pt.end >=  #{params[:year]} AND pt.team_id = t.id AND t.name='#{params[:team_name]}'  AND NOT EXISTS (SELECT * FROM games g WHERE (g.away_team_id = t.id OR g.home_team_id = t.id) AND g.year=#{params[:year]} AND NOT EXISTS (SELECT * FROM players_games pg WHERE pg.game_id = g.id AND pg.team_id = t.id AND pg.player_id = p.id))") if params[:year].present? && params[:team_name].present?
+
+    pids = funkyids.map {|p| p.id}
+    @players = Player.find(pids); 
+    @players = @players.paginate(page: params[:page])
+    @title = "Results for query 1"
+    render :index
+
   end
 
 end

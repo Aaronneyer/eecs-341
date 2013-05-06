@@ -16,3 +16,19 @@
   <br />
   <%= submit_tag("Search") %>
 <% end %>
+
+
+<h2> Query1. </h2>
+<p>Input a team and a year to find all players that have played in all games for that team in the given year. </p>
+
+<%= form_tag(playallgames_players_path, method: :get) do %>
+  <%= label_tag(:year) %>
+  <%= select_tag(:year, options_for_select([""] + (1920..2012).to_a.reverse)) %>
+  <br />
+
+  <%= label_tag(:team_name) %>
+  <%= select_tag(:team_name, options_for_select([""] + @allteams)) %>
+  <br />
+  
+  <%= submit_tag("Search") %>
+<% end %>

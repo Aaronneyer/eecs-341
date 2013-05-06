@@ -17,6 +17,7 @@ Eecs341::Application.routes.draw do
     collection do
       get :search
       get :results
+      get :playallgames
     end
     member do
       get :games

@@ -31,17 +31,7 @@ class TeamsController < ApplicationController
     @title = "Results"
     render :index
   end
-=begin
-    Players = Player.arel_table
-    @players = Player.years_stats
-    @players = @players.where(players[:name].matches("%#{params[:search]}%")) if params[:search].present?
-    @players = @players.where(players[:position].matches("%#{params[:position]}%")) if params[:position].present?
-    @players = @players.where("players_years.year = ?", params[:year]) if params[:year].present?
-    @players = @players.where("player_stats.#{params[:filter_by]} >= ?", params[:stats]) if params[:filter_by].present? && params[:stats].present?
-    @players = @players.uniq
-    @players = @players.paginate(page: params[:page]).order("name")
-    @title = "Results"
-    render :index
-  end
-=end
+
+
 end
+
