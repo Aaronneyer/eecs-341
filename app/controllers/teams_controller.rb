@@ -60,7 +60,12 @@ class TeamsController < ApplicationController
   end
 
   def teamhaspmin
-    #@players = Players.where("players_teams.
+    @teams = Team.find_by_sql(["select t.* from players_years py, player_stats ps, players_teams pt, teams t
+                                 WHERE t.id = pt.team_id AND pt.player_id = py.player_id AND py.player_stats_id = ps.id
+                                AND pt.start <= ? AND pt.end >= ? AND ps.? >= ?", params[:year], params[:year], params[:stats], params[:yards]])
+    @teams = @teams.paginate(page: params[:page]).uniq
+    @title = "Results"
+    render :index
   end
 end
 

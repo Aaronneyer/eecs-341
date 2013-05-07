@@ -55,9 +55,6 @@
   <%= label_tag(:year) %>
   <%= select_tag(:year, options_for_select([""] + (1920..2012).to_a.reverse)) %>
   <br />
-  <%= label_tag(:stats, "Select player stat") %>
-  <%= select_tag(:stats, options_for_select([""] + @stats)) %>
-  <br />
   <%= label_tag(:yards, "Minimum" ) %>
   <%= text_field_tag(:yards) %>
   <br />
