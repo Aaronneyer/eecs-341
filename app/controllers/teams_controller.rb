@@ -48,16 +48,13 @@ class TeamsController < ApplicationController
   end
 
   def teamavgforpos
-    @teams = Team.find_by_sql(["select t.name, t.id from players p, players_games pg, games g, 
-                              teams t, player_stats ps where g.year = ? and (g.away_team_id = t.id
+    @teams = Team.find_by_sql(["select t.* from players p, players_games pg, games g,
+                               teams t, player_stats ps where g.year = ? and (g.away_team_id = t.id
                                or g.home_team_id = t.id) and pg.game_id = g.id and pg.team_id = t.id
-                               and p.position = ? and p.id = pg.player_id and 
+                               and p.position = ? and p.id = pg.player_id and
                                pg.player_stats_id = ps.id group by t.id
-                               having avg(?) > ?", params[:year], params[:position], params[:stats], params[:yards]])
-    puts @teams.count
-    
+                               having avg(ps.?) > ?", params[:year], params[:position], params[:stats], params[:yards].to_i])
     @teams = @teams.paginate(page: params[:page])
-    
     @title = "Results"
     render :index
   end
