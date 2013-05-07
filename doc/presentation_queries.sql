@@ -52,3 +52,9 @@ and p.position = 'QB' and p.id = pg.player_id and
 pg.player_stats_id = ps.id group by t.id
 having avg(ps.'passing_yards') > 100
 
+--Find teams that have atleast one player with a given minimum stat for the year
+
+select t.* from players_years py, player_stats ps, players_teams pt, teams t
+WHERE t.id = pt.team_id AND pt.player_id = py.player_id AND py.player_stats_id = ps.id
+AND pt.start <= '2009' AND pt.end >= '2009' AND ps.'passing_yards' >= '500'
+
