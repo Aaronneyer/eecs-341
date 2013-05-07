@@ -7,6 +7,9 @@ Eecs341::Application.routes.draw do
     collection do
       get :search
       get :results
+      get :mostyardage
+      get :teamavgforpos
+      get :teamhaspmin
     end
     member do
       get :games

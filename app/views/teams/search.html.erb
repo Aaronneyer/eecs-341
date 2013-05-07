@@ -1,5 +1,6 @@
+<h2> Generic Search </h2>
 <%= form_tag(results_teams_path, method: :get) do %>
-  <%= label_tag(:search) %>
+  <%= label_tag(:search, "Team name") %>
   <%= text_field_tag(:search) %>
   <br />
   <%= label_tag(:year) %>
@@ -11,3 +12,54 @@
   <%= submit_tag("Search") %>
 <% end %>
 
+<h2> Max stat </h2>
+<p> Given a year and a stat, find the team that had the max. </p>
+
+
+<%= form_tag(mostyardage_teams_path, method: :get) do %>
+  <%= label_tag(:year) %>
+  <%= select_tag(:year, options_for_select([""] + (1920..2012).to_a.reverse)) %>
+  <br />
+  <%= label_tag(:stat_name, "Choose a stat") %>
+  <%= select_tag(:stat_name, options_for_select([""] + @team_stat_names)) %>
+  <br />
+  <%= submit_tag("Search") %>
+<% end %>
+
+<h2> Average Teams </h2>
+<p> Find teams that average x or more for a given stat for a given position in a given year. </p>
+
+<%= form_tag(teamavgforpos_teams_path, method: :get) do %>
+ 
+  <%= label_tag(:year) %>
+  <%= select_tag(:year, options_for_select([""] + (1920..2012).to_a.reverse)) %>
+  <br />
+  <%= label_tag(:position, "Player position") %>
+  <%= select_tag(:position, options_for_select([""] + @positions)) %>
+  <br />
+
+  <%= label_tag(:stats, "Select player stat" ) %>
+  <%= select_tag(:stats, options_for_select([""] + @stats)) %>
+  <br />
+  <%= label_tag(:yards) %>
+  <%= text_field_tag(:yards) %>
+  <br />
+  <%= submit_tag("Search") %>
+
+<% end %>
+
+<h2> Team meets standards </h2>
+<p> Find teams that have at least one player with a given minimum player stat in a given year. </p>
+
+<%= form_tag(teamhaspmin_teams_path, method: :get) do %>
+  <%= label_tag(:year) %>
+  <%= select_tag(:year, options_for_select([""] + (1920..2012).to_a.reverse)) %>
+  <br />
+  <%= label_tag(:stats, "Select player stat") %>
+  <%= select_tag(:stats, options_for_select([""] + @stats)) %>
+  <br />
+  <%= label_tag(:yards, "Minimum" ) %>
+  <%= text_field_tag(:yards) %>
+  <br />
+  <%= submit_tag("Search") %>
+<% end %>
