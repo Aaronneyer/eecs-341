@@ -18,6 +18,10 @@ class Team < ActiveRecord::Base
     Game.where("home_team_id = ? OR away_team_id = ?", id, id)
   end
 
+  def full_name
+    "#{city} #{name}"
+  end
+
   def self.all_teams
     self.all.collect(&:name).flatten
   end

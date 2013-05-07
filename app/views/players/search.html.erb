@@ -18,7 +18,7 @@
 <% end %>
 
 
-<h2> Query1. </h2>
+<h2> Played All Games </h2>
 <p>Input a team and a year to find all players that have played in all games for that team in the given year. </p>
 
 <%= form_tag(playallgames_players_path, method: :get) do %>
@@ -26,8 +26,8 @@
   <%= select_tag(:year, options_for_select([""] + (1920..2012).to_a.reverse)) %>
   <br />
 
-  <%= label_tag(:team_name) %>
-  <%= select_tag(:team_name, options_for_select([""] + @allteams)) %>
+  <%= label_tag(:team) %>
+  <%= select_tag(:team, options_from_collection_for_select(@teams, 'id', 'full_name')) %>
   <br />
   
   <%= submit_tag("Search") %>
