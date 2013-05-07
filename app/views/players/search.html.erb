@@ -1,3 +1,5 @@
+<h2>Generic Search</h2>
+
 <%= form_tag(results_players_path, method: :get) do %>
   <%= label_tag(:search) %>
   <%= text_field_tag(:search) %>
@@ -30,5 +32,85 @@
   <%= select_tag(:team, options_from_collection_for_select(@teams, 'id', 'full_name')) %>
   <br />
   
+  <%= submit_tag("Search") %>
+<% end %>
+
+<h2>Average Stats</h2>
+<p>Input a player, a start and end year, and a field, and get that players
+average stat per game during that time period.</p>
+
+<%= form_tag(averageyards_players_path, method: :get) do %>
+  <%= label_tag(:player_name) %>
+  <%= text_field_tag(:player_name) %>
+  <br />
+
+  <%= label_tag(:start) %>
+  <%= select_tag(:start, options_for_select((1920..2012).to_a.reverse)) %>
+  <br />
+
+  <%= label_tag(:end) %>
+  <%= select_tag(:end, options_for_select((1920..2012).to_a.reverse)) %>
+  <br />
+
+  <%= label_tag(:team) %>
+  <%= select_tag(:team, options_from_collection_for_select(@teams, 'id', 'full_name')) %>
+  <br />
+
+  <%= label_tag(:filter_by) %>
+  <%= select_tag(:filter_by, options_for_select([""] + @stats)) %>
+  <br />
+  
+  <%= submit_tag("Search") %>
+<% end %>
+
+<h2>Stats Against</h2>
+<p>Input a player, a start and end year, a field, and a team, and get that players
+total stats per game during that time period while playing against the team</p>
+
+<%= form_tag(yardsagainstteam_players_path, method: :get) do %>
+  <%= label_tag(:player_name) %>
+  <%= text_field_tag(:player_name) %>
+  <br />
+
+  <%= label_tag(:start) %>
+  <%= select_tag(:start, options_for_select((1920..2012).to_a.reverse)) %>
+  <br />
+
+  <%= label_tag(:end) %>
+  <%= select_tag(:end, options_for_select((1920..2012).to_a.reverse)) %>
+  <br />
+
+  <%= label_tag(:team) %>
+  <%= select_tag(:team, options_from_collection_for_select(@teams, 'id', 'full_name')) %>
+  <br />
+
+  <%= label_tag(:filter_by) %>
+  <%= select_tag(:filter_by, options_for_select([""] + @stats)) %>
+  <br />
+  
+  <%= submit_tag("Search") %>
+<% end %>
+
+<h2>Record Against</h2>
+<p>Input a player, a start and end year, and a team, and get that players
+total record against that team during that time period</p>
+
+<%= form_tag(recordagainstteam_players_path, method: :get) do %>
+  <%= label_tag(:player_name) %>
+  <%= text_field_tag(:player_name) %>
+  <br />
+
+  <%= label_tag(:start) %>
+  <%= select_tag(:start, options_for_select((1920..2012).to_a.reverse)) %>
+  <br />
+
+  <%= label_tag(:end) %>
+  <%= select_tag(:end, options_for_select((1920..2012).to_a.reverse)) %>
+  <br />
+
+  <%= label_tag(:team) %>
+  <%= select_tag(:team, options_from_collection_for_select(@teams, 'id', 'full_name')) %>
+  <br />
+
   <%= submit_tag("Search") %>
 <% end %>

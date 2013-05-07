@@ -49,9 +49,52 @@ class PlayersController < ApplicationController
                                   AND g.year = ? AND NOT EXISTS (SELECT * FROM players_games pg WHERE pg.game_id = g.id
                                   AND pg.team_id = t.id AND pg.player_id = p.id))",
                                   params[:year], params[:year], params[:team], params[:year]]).paginate(page: params[:page])
-    @title = "Results for query 1"
+    @title = "Query 1 Result"
     render :index
+  end
 
+  def averageyards
+    pname = ActiveRecord::Base.sanitize(params[:player_name])
+    startyear = ActiveRecord::Base.sanitize(params[:start])
+    endyear = ActiveRecord::Base.sanitize(params[:end])
+    filterfield = ActiveRecord::Base.sanitize(params[:filter_by])
+    result = ActiveRecord::Base.connection.execute("SELECT AVG(ps.#{filterfield}) FROM games g, players p, players_games pg, player_stats ps
+             WHERE p.name = #{pname} AND p.id = pg.player_id AND pg.game_id = g.id
+             AND g.year >= #{startyear} AND g.year <= #{endyear} AND pg.player_stats_id = ps.id")
+    @result = "Average #{filterfield} per game between #{startyear} and #{endyear} for #{pname}: #{Float(result[0][0]).round(2)}"
+    @title = "Query 2 Result"
+    render :base_result
+  end
+
+  def yardsagainstteam
+    pname = ActiveRecord::Base.sanitize(params[:player_name])
+    tid = ActiveRecord::Base.sanitize(params[:team])
+    startyear = ActiveRecord::Base.sanitize(params[:start])
+    endyear = ActiveRecord::Base.sanitize(params[:end])
+    filterfield = ActiveRecord::Base.sanitize(params[:filter_by])
+    result = ActiveRecord::Base.connection.execute("SELECT SUM(ps.#{filterfield}) FROM games g, players p, teams t, players_games pg, player_stats ps
+             WHERE p.name = #{pname} AND p.id = pg.player_id AND pg.game_id = g.id
+             AND ((g.home_team_id=#{tid} AND g.away_team_id = pg.team_id)
+             OR (g.away_team_id=#{tid} AND g.home_team_id = pg.team_id))
+             AND g.year >= #{startyear} AND g.year <= #{endyear} AND pg.player_stats_id = ps.id")
+    @result = "Total #{filterfield} between #{startyear} and #{endyear} against #{Team.find(params[:team]).name} for #{pname}: #{Float(result[0][0]).round(2)}"
+    @title = "Query 3 Result"
+    render :base_result
+  end
+
+  def recordagainstteam
+    pname = ActiveRecord::Base.sanitize(params[:player_name])
+    tid = ActiveRecord::Base.sanitize(params[:team])
+    startyear = ActiveRecord::Base.sanitize(params[:start])
+    endyear = ActiveRecord::Base.sanitize(params[:end])
+    result = ActiveRecord::Base.connection.execute("SELECT SUM(ts.wins), SUM(ts.losses), SUM(ts.ties) FROM games g, players p, players_games pg, team_stats ts
+             WHERE p.name = #{pname} AND p.id = pg.player_id AND pg.game_id = g.id
+             AND ((g.home_team_id=#{tid} AND g.away_team_id = pg.team_id AND g.away_team_stats_id=ts.id)
+             OR (g.away_team_id=#{tid} AND g.home_team_id = pg.team_id AND g.home_team_stats_id=ts.id))
+             AND g.year >= #{startyear} AND g.year <= #{endyear}")[0]
+    @result = "Total record between #{startyear} and #{endyear} against #{Team.find(params[:team]).name} for #{pname}: #{result[0]}-#{result[1]}-#{result[2]}"
+    @title = "Query 3 Result"
+    render :base_result
   end
 
 end

@@ -273,7 +273,7 @@ def get_table_hash(table)
             temp[header[i]] = nil
           end
         else
-          temp[header[i]] = td.content
+          temp[header[i]] = td.content unless header[i]=="Yds" && temp["Yds"].present?
         end
       end
       stats << temp
