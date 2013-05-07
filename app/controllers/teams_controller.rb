@@ -1,4 +1,5 @@
 class TeamsController < ApplicationController
+  require 'will_paginate/array'
 
   def show
     @team = Team.find(params[:id])

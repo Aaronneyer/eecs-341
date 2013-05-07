@@ -58,5 +58,8 @@
   <%= label_tag(:yards, "Minimum" ) %>
   <%= text_field_tag(:yards) %>
   <br />
+  <%= label_tag(:stats, "Select player stat" ) %>
+  <%= select_tag(:stats, options_for_select([""] + @stats)) %>
+  <br />
   <%= submit_tag("Search") %>
 <% end %>
