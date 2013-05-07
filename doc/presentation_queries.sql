@@ -29,3 +29,18 @@ AND ((g.home_team_id='7' AND g.away_team_id = pg.team_id AND g.away_team_stats_i
 OR (g.away_team_id='7' AND g.home_team_id = pg.team_id AND g.home_team_stats_id=ts.id))
 AND g.year >= '2000' AND g.year <= '2012'
 
+--Teams matching a search with atleast N wins in the given season
+
+SELECT DISTINCT "teams".* FROM "teams"
+INNER JOIN "team_years" ON "team_years"."team_id" = "teams"."id"
+INNER JOIN "team_stats" ON "team_stats"."id" = "team_years"."team_stats_id"
+WHERE (team_years.year = '2012') AND (team_stats.wins >= '5') ORDER BY name LIMIT 30 OFFSET 0
+
+--Order teams by given stat in a given year
+
+SELECT DISTINCT COUNT(DISTINCT "teams"."id") FROM "teams"
+INNER JOIN "team_years" ON "team_years"."team_id" = "teams"."id"
+INNER JOIN "team_stats" ON "team_stats"."id" = "team_years"."team_stats_id"
+WHERE (team_years.year = '2011')
+
+
