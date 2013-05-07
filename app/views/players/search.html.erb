@@ -40,8 +40,9 @@
 average stat per game during that time period.</p>
 
 <%= form_tag(averageyards_players_path, method: :get) do %>
-  <%= label_tag(:player_name) %>
-  <%= text_field_tag(:player_name) %>
+  <%= label_tag(:player_name, "Player") %>
+  <%= autocomplete_field_tag :player_name, '', autocomplete_player_name_players_path, data: {id_element: "#player"} %>
+  <%= hidden_field_tag :player %>
   <br />
 
   <%= label_tag(:start) %>
@@ -50,10 +51,6 @@ average stat per game during that time period.</p>
 
   <%= label_tag(:end) %>
   <%= select_tag(:end, options_for_select((1920..2012).to_a.reverse)) %>
-  <br />
-
-  <%= label_tag(:team) %>
-  <%= select_tag(:team, options_from_collection_for_select(@teams, 'id', 'full_name')) %>
   <br />
 
   <%= label_tag(:filter_by) %>
@@ -68,23 +65,24 @@ average stat per game during that time period.</p>
 total stats per game during that time period while playing against the team</p>
 
 <%= form_tag(yardsagainstteam_players_path, method: :get) do %>
-  <%= label_tag(:player_name) %>
-  <%= text_field_tag(:player_name) %>
+  <%= label_tag(:player_name_1, "Player") %>
+  <%= autocomplete_field_tag :player_name_1, '', autocomplete_player_name_players_path, data: {id_element: "#player1"} %>
+  <%= hidden_field_tag :player1 %>
   <br />
 
-  <%= label_tag(:start) %>
+  <label>Start</label>
   <%= select_tag(:start, options_for_select((1920..2012).to_a.reverse)) %>
   <br />
 
-  <%= label_tag(:end) %>
+  <label>End</label>
   <%= select_tag(:end, options_for_select((1920..2012).to_a.reverse)) %>
   <br />
 
-  <%= label_tag(:team) %>
+  <label>Team</label>
   <%= select_tag(:team, options_from_collection_for_select(@teams, 'id', 'full_name')) %>
   <br />
 
-  <%= label_tag(:filter_by) %>
+  <label>Filter By</label>
   <%= select_tag(:filter_by, options_for_select([""] + @stats)) %>
   <br />
   
@@ -96,19 +94,20 @@ total stats per game during that time period while playing against the team</p>
 total record against that team during that time period</p>
 
 <%= form_tag(recordagainstteam_players_path, method: :get) do %>
-  <%= label_tag(:player_name) %>
-  <%= text_field_tag(:player_name) %>
+  <%= label_tag(:player_name_2, "Player") %>
+  <%= autocomplete_field_tag :player_name_2, '', autocomplete_player_name_players_path, data: {id_element: "#player2"} %>
+  <%= hidden_field_tag :player2 %>
   <br />
 
-  <%= label_tag(:start) %>
+  <label>Start</label>
   <%= select_tag(:start, options_for_select((1920..2012).to_a.reverse)) %>
   <br />
 
-  <%= label_tag(:end) %>
+  <label>End</label>
   <%= select_tag(:end, options_for_select((1920..2012).to_a.reverse)) %>
   <br />
 
-  <%= label_tag(:team) %>
+  <label>Team</label>
   <%= select_tag(:team, options_from_collection_for_select(@teams, 'id', 'full_name')) %>
   <br />
 

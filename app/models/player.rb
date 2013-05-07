@@ -18,6 +18,9 @@ class Player < ActiveRecord::Base
     end
   end
 
+  def autocomplete_display
+    "#{name} (#{current_team_name}, #{years_active.last})"
+  end
 
   def years_active
     py = self.players_years.order("year")

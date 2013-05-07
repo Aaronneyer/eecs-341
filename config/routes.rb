@@ -24,6 +24,7 @@ Eecs341::Application.routes.draw do
       get :averageyards
       get :yardsagainstteam
       get :recordagainstteam
+      get :autocomplete_player_name
     end
     member do
       get :games

@@ -7,6 +7,8 @@ gem 'sqlite3'
 gem 'nokogiri'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
+gem 'jquery-ui-rails'
+gem 'rails3-jquery-autocomplete'
 
 # Gems used only for assets and not required
 # in production environments by default.
