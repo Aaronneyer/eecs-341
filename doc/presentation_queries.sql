@@ -43,4 +43,12 @@ INNER JOIN "team_years" ON "team_years"."team_id" = "teams"."id"
 INNER JOIN "team_stats" ON "team_stats"."id" = "team_years"."team_stats_id"
 WHERE (team_years.year = '2011')
 
+--Find teams that average N or more of a given stat for a given position in a given year
+
+select t.* from players p, players_games pg, games g,
+teams t, player_stats ps where g.year = '2012' and (g.away_team_id = t.id
+or g.home_team_id = t.id) and pg.game_id = g.id and pg.team_id = t.id
+and p.position = 'QB' and p.id = pg.player_id and
+pg.player_stats_id = ps.id group by t.id
+having avg(ps.'passing_yards') > 100
 
